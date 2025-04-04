@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Doce Vida</title>
+
+    <!-- Vinculando o CSS -->
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- Vinculando o Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    
+    <!-- Vinculando o Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="public/script.js" defer></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <span>DOCE VIDA</span>
+        </div>
+           
+            
+        <nav class="search-container">
+            <input type="text" id="searchBar" placeholder="Buscar..." onkeyup="searchFunction()">
+            <i class="fas fa-search search-icon"></i>
+            <div id="searchResults"></div>
+        </nav>
+
+        <div class="notification-container">
+            <button id="notification-btn">
+                🔔
+                <span class="notification-count">3</span> <!-- Número de notificações -->
+            </button>
+            <div class="notification-dropdown" id="notification-dropdown">
+                <p>Você tem 3 novas notificações</p>
+                <ul>
+                    <li>📢 Atualização no site!</li>
+                    <li>🆕 Novo jogo disponível!</li>
+                    <li>🎉 Promoção especial!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="profile-btn" onclick="toggleMenu()">
+            <img class="user-avatar" src="img/perfil.jpg" alt="User profile picture" width="40px" />
+        </div>
+    </header>
+
+    <!-- Menu suspenso -->
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="perfil.php">Perfil</a></li>
+            <li><a href="config.html">Configurações</a></li>
+            <li><a href="ranking.html">Ranking</a></li>
+            <li><a href="loja.html">Loja</a></li>
+            <li><a href="#">Sair</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="grid-container">
+            <!-- Caça Palavras -->
+            <article class="grid-item">
+                <img class="grid-image" src="img/caça palavras.png" alt="Word search puzzle with colorful highlighted words" width="46%" />
+                <p class="grid-title">Caça Palavras</p>
+            </article>
+
+            <!-- Aprenda a comer -->
+            <article class="grid-item">
+                <img class="grid-image" src="img/aprenda a comer.png" alt="Cartoon vegetables with smiling faces" width="50%" />
+                <p class="grid-title">Aprenda a comer</p>
+            </article>
+
+            <!-- Complete as frases -->
+            <article class="grid-item">
+                <img class="grid-image" src="img/complete as frases.png" alt="Colorful text saying 'Complete as Frases' with educational icons" width="46%" />
+                <p class="grid-title">Complete as frases</p>
+            </article>
+        </section>
+    </main>
+
+    <!-- Background Image -->
+    <div class="background-image">
+        <img class="background-img" src="img/fundo.png" alt="Background image with medical tools, a glucose meter, and a spoon of sugar" />
+    </div>
+
+</body>
+
+</html>
