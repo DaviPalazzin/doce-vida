@@ -168,6 +168,9 @@ article.grid-item {
 .menu ul li a:hover {
     color: #ddd;
 }
+.search-container{
+    margin-right: 140px;
+}
 
 #searchResults {
     position: absolute;
@@ -204,7 +207,6 @@ article.grid-item {
 /* Botão de pesquisa com efeito */
 #searchBar {
     width: 100%;
-    margin-left: 20px;
     padding: 0.5rem;
     border-radius: 9999px;
     border: 2px solid #4fa3f7;
@@ -214,57 +216,4 @@ article.grid-item {
 #searchBar:focus {
     border-color: #1e88e5;
     box-shadow: 0 0 8px rgba(79, 163, 247, 0.8);
-}
-
-.notification-container {
-    position: relative;
-    display: inline-block;
-}
-
-#notification-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    position: relative;
-    margin-left: -140px;
-}
-
-.notification-count {
-    background: red;
-    color: white;
-    font-size: 12px;
-    border-radius: 50%;
-    padding: 4px 7px;
-    position: absolute;
-    top: -5px;
-    right: -5px;
-}
-
-.notification-dropdown {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 200px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-}
-
-.notification-dropdown ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.notification-dropdown li {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-}
-
-.notification-dropdown li:last-child {
-    border-bottom: none;
 }

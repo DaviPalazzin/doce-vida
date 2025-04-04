@@ -50,17 +50,3 @@ function searchFunction() {
     }
 }
 
-document.getElementById("notification-btn").addEventListener("click", function() {
-    let dropdown = document.getElementById("notification-dropdown");
-    dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
-});
-
-// Fechar o menu ao clicar fora dele
-document.addEventListener("click", function(event) {
-    let dropdown = document.getElementById("notification-dropdown");
-    let button = document.getElementById("notification-btn");
-    
-    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.style.display = "none";
-    }
-});
