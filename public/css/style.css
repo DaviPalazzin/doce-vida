@@ -81,6 +81,7 @@ main {
     justify-content: center; /* Alinha os itens ao centro */
     gap: 30px; /* Espaço entre os cards */
     flex-wrap: wrap; /* Permite que os itens quebrem linha em telas menores */
+    padding-bottom: 50px; /* Aumenta o espaço entre os jogos e o rodapé */
 }
 
 article.grid-item {
@@ -236,4 +237,74 @@ article.grid-item {
     .logo{
         width: 60%;
     }
+}
+
+footer {
+    background-color: #e0f2fe; /* Azul claro */
+    padding: 30px 50px;
+    text-align: center;
+    color: #333;
+    margin-top: 50px; /* Aumenta o espaço entre o conteúdo e o rodapé */
+}
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.social-media i {
+    font-size: 24px;
+    color: #3b82f6; /* Azul escuro */
+    transition: 0.3s;
+}
+
+.social-media i:hover {
+    color: #1e3a8a; /* Azul mais escuro ao passar o mouse */
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.footer-column {
+    text-align: left;
+}
+
+.footer-column h3 {
+    color: #1e3a8a; /* Azul escuro */
+    margin-bottom: 10px;
+}
+
+.footer-column a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.footer-column a:hover {
+    color: #3b82f6; /* Azul ao passar o mouse */
+}
+
+.back-to-top {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.back-to-top:hover {
+    background-color: #1e3a8a;
 }

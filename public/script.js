@@ -18,7 +18,7 @@ const siteFunctions = [
     { name: "Caça Palavras", link: "#" },
     { name: "Aprenda a Comer", link: "#" },
     { name: "Configurações", link: "config.html" },
-    { name: "Perfil", link: "perfil.php" },
+    { name: "Perfil", link: "perfil.html" },
     { name: "Sobre Nós", link: "sobre.html" },
     { name: "Sair", link: "#" }
 ];
@@ -48,4 +48,8 @@ function searchFunction() {
             resultsDiv.innerHTML = "<div class='search-item'>Nenhum resultado encontrado</div>";
         }
     }
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
