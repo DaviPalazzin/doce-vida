@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['username'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: index.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -55,11 +67,11 @@
   <!-- Menu suspenso -->
   <nav id="menu" class="menu">
     <ul>
-      <li><a href="perfil.html">Perfil</a></li>
-      <li><a href="config.html">Configurações</a></li>
-      <li><a href="ranking.html">Ranking</a></li>
-      <li><a href="loja.html">Loja</a></li>
-      <li><a href="#">Sair</a></li>
+      <li><a href="perfil.php">Perfil</a></li>
+      <li><a href="config.php">Configurações</a></li>
+      <li><a href="ranking.php">Ranking</a></li>
+      <li><a href="loja.php">Loja</a></li>
+      <li><a href="logout.php">Sair</a></li>
     </ul>
   </nav>
 

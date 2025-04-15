@@ -16,7 +16,7 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_DATABASE: application
+      MYSQL_DATABASE: sistema_login
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
       MYSQL_ROOT_PASSWORD: rootpass

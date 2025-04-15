@@ -1,0 +1,213 @@
+/* Resetando margens e paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    overflow: hidden;
+    background: #000; /* Fundo preto */
+    animation: backgroundChange 10s infinite alternate;
+}
+
+@keyframes backgroundChange {
+    0% { background: #333; } /* Cinza escuro */
+    100% { background: #111; } /* Cinza mais escuro */
+}
+
+/* Canvas de partículas (Bolhas no fundo) */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none; /* Certifica-se de que o canvas não interfira na interação com o formulário */
+}
+
+/* Container centralizado */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Formulário de registro */
+.register-form {
+    background: rgba(255, 255, 255, 0.8); /* Fundo branco com opacidade */
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Sombra suave */
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    animation: slideIn 0.5s ease; /* Animação ao entrar */
+    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
+    transition: background 0.5s, opacity 0.5s; /* Transição suave */
+    position: relative; /* Para garantir que a caixa de formulário fique acima do canvas */
+}
+
+/* Aumenta a opacidade quando passar o mouse */
+.register-form:hover {
+    background: rgba(255, 255, 255, 0.9); /* Aumenta a opacidade ao passar o mouse */
+}
+
+/* Animação do formulário */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #000; /* Preto */
+}
+
+p {
+    margin-bottom: 15px;
+    color: #333; /* Cinza escuro */
+}
+
+/* Grupo de entrada de dados */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    color: #666; /* Cinza */
+}
+
+/* Estilo de campos de entrada */
+.input-group input {
+    width: 100%;
+    padding: 10px 40px;
+    border: 1px solid #ccc; /* Cinza claro */
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #000; /* Preto ao focar */
+    outline: none;
+}
+
+/* Botão de envio */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000; /* Preto */
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #333; /* Cinza escuro ao passar o mouse */
+}
+
+/* Links de recuperação de senha e rede sociais */
+.forgot-password {
+    margin: 10px 0;
+    color: #666; /* Cinza */
+}
+
+.social-media {
+    margin: 20px 0;
+}
+
+.social-icon {
+    margin: 0 10px;
+    color: #666; /* Cinza */
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: #000; /* Preto ao passar o mouse */
+}
+
+/* Alternar entre login e registro */
+.switch-form {
+    margin-top: 15px;
+}
+
+/* Link para cadastro */
+.register-link {
+    color: #000; /* Preto */
+    text-decoration: none;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* Mensagens de erro */
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none; /* Inicialmente invisível */
+}
+
+/* Estilo para as mensagens de erro */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estilo para as mensagens de sucesso */
+.success-message {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estilo para as mensagens de erro */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estilo para as mensagens de sucesso */
+.success-message {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Mensagem geral de erro ou sucesso */
+.message {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
