@@ -1,9 +1,7 @@
 <?php
-include('conexao.php'); // Inclua a conexão com o banco de dados
+include('conexao.php');
 
-// Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recebe os dados do formulário
     $username = $_POST['username'];
     $senha = $_POST['senha'];
 
@@ -15,41 +13,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) > 0) {
-        // Usuário já existe
         echo json_encode(['error' => 'Nome de usuário já existe.']);
     } else {
-        // Se não existe, cria o novo usuário
         $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
         $query = "INSERT INTO usuarios (username, senha) VALUES (?, ?)";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ss", $username, $senha_hash);
 
         if (mysqli_stmt_execute($stmt)) {
-            // Cadastro bem-sucedido
             echo json_encode(['success' => 'Cadastro realizado com sucesso!']);
         } else {
             echo json_encode(['error' => 'Erro ao cadastrar!']);
         }
-    }
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-    exit();
-}
-
-// Verifica se a requisição é para checar o nome de usuário
-if (isset($_GET['check_username'])) {
-    $username = $_GET['check_username'];
-    $check_user = "SELECT * FROM usuarios WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $check_user);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (mysqli_num_rows($result) > 0) {
-        echo json_encode(['exists' => true]);
-    } else {
-        echo json_encode(['exists' => false]);
     }
 
     mysqli_stmt_close($stmt);
@@ -61,74 +36,94 @@ if (isset($_GET['check_username'])) {
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-    <link rel="stylesheet" href="register.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Doce Vida - Cadastro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <canvas id="backgroundCanvas"></canvas>
+<body class="bg-blue-200 h-screen flex items-center justify-center">
 
-    <div class="container">
-        <form id="registerForm" method="POST" class="register-form">
-            <h1>Crie sua conta</h1>
-            <p>Preencha os campos abaixo para se registrar.</p>
-
-            <div class="input-group">
-                <i class="fa fa-user"></i>
-                <input type="text" name="username" id="username" placeholder="Nome de usuário" required>
-                <div id="usernameError" class="error-message"></div>
+<div class="flex w-full max-w-4xl">
+    <!-- Left Section -->
+    <div class="w-1/2 flex flex-col items-center justify-center">
+        <div class="text-center">
+            <div class="flex items-center justify-center mb-4">
+                <img src="img/fita doce vida.png" alt="Blue ribbon logo for diabetes awareness" class="h-16 w-30">
             </div>
+            <h1 class="text-3xl font-bold text-blue-900">Doce Vida</h1>
+            <p class="text-blue-900 text-sm mt-2">Sua jornada na prevenção à diabetes</p>
+        </div>
 
-            <div class="input-group">
-                <i class="fa fa-lock"></i>
-                <input type="password" name="senha" id="senha" placeholder="Senha" required>
-            </div>
+        <form id="registerForm" class="mt-8 w-3/4" method="POST">
+            <input class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none"
+                   type="text" name="username" id="username" placeholder="Nome" required>
+            <div id="usernameError" class="text-red-600 text-sm mb-2"></div>
 
-            <button type="submit">Cadastrar</button>
+            <input class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none"
+                   type="password" name="senha" placeholder="Senha" required>
 
-            <!-- Exibe a mensagem de erro ou sucesso abaixo do botão -->
-            <div id="registerMessage" class="message"></div>
+            <div id="registerMessage" class="text-center text-sm font-semibold mb-4"></div>
 
-            <p class="forgot-password">Já tem uma conta? <a href="index.php" class="register-link">Faça login</a></p>
+            <button type="submit"
+                    class="w-full bg-blue-400 text-white py-2 rounded-full hover:bg-blue-500 transition">
+                CADASTRAR
+            </button>
+
+            <a href="index.php" class="text-blue-900 text-sm underline block text-center mt-4">
+                Já tem conta? Faça o login
+            </a>
         </form>
     </div>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Verifica se o nome de usuário já existe enquanto o usuário digita
-            $('#username').on('blur', function() {
-                var username = $(this).val();
-                
-                if (username) {
-                    $.get('register.php', { check_username: username }, function(data) {
-                        var response = JSON.parse(data);
-                        if (response.exists) {
-                            $('#usernameError').text('Nome de usuário já existe.').show();
-                        } else {
-                            $('#usernameError').text('').hide();
-                        }
-                    });
-                }
-            });
+    <!-- Right Section -->
+    <div class="w-1/2 flex items-center justify-center">
+        <div class="relative">
+            <div class="bg-blue-300 rounded-full h-64 w-64 flex items-center justify-center">
+                <div class="bg-blue-400 rounded-full h-48 w-48 flex items-center justify-center">
+                    <img src="img/login doce vida.png" alt="Imagem de login" class="h-128 w-64">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            // Submissão do formulário
-            $('#registerForm').submit(function(e) {
-                e.preventDefault(); // Impede a submissão tradicional
-
-                var formData = $(this).serialize(); // Coleta os dados do formulário
-                $.post('register.php', formData, function(data) {
-                    var response = JSON.parse(data);
-                    if (response.error) {
-                        $('#registerMessage').text(response.error).removeClass('success').addClass('error').show();
-                    } else if (response.success) {
-                        $('#registerMessage').text(response.success).removeClass('error').addClass('success').show();
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Verifica se o nome de usuário já existe ao sair do campo
+        $('#username').on('blur', function () {
+            const username = $(this).val();
+            if (username) {
+                $.get('register.php', {check_username: username}, function (data) {
+                    const response = JSON.parse(data);
+                    if (response.exists) {
+                        $('#usernameError').text('Nome de usuário já existe.');
+                    } else {
+                        $('#usernameError').text('');
                     }
                 });
+            }
+        });
+
+        // Envia o formulário via AJAX
+        $('#registerForm').submit(function (e) {
+            e.preventDefault();
+
+            const formData = $(this).serialize();
+            $.post('register.php', formData, function (data) {
+                const response = JSON.parse(data);
+                const messageDiv = $('#registerMessage');
+
+                if (response.error) {
+                    messageDiv.text(response.error).removeClass('text-green-600').addClass('text-red-600');
+                } else if (response.success) {
+                    messageDiv.text(response.success).removeClass('text-red-600').addClass('text-green-600');
+                    $('#registerForm')[0].reset(); // limpa os campos
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
