@@ -9,12 +9,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST['senha'];
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $query = "SELECT * FROM usuarios WHERE email = '$email' OR username = '$username'";
+    // Verificar se o email já existe no banco de dados
+    $query = "SELECT * FROM usuarios WHERE email = '$email'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) > 0) {
-        $erro = "E-mail ou nome de usuário já existe!";
+        $erro = "E-mail já cadastrado!";
     } else {
+        // Inserir o usuário no banco de dados (email, nome de usuário, senha)
         $query = "INSERT INTO usuarios (email, username, senha) VALUES ('$email', '$username', '$senha_hash')";
         if (mysqli_query($conn, $query)) {
             header("Location: index.php");
@@ -49,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <form method="POST" action="register.php" class="mt-8 w-3/4">
         <input name="email" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" type="email" placeholder="E-mail" required>
-        <input name="username" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Usuário" type="text" required>
+        <input name="username" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Nome" type="text" required>
         <input name="senha" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Senha" type="password" required>
 
         <?php if (!empty($erro)): ?>
@@ -72,4 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
         </div>
       </div>
-    </div
+    </div>
+
+  </div>
+</body>
+</html>

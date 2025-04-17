@@ -7,10 +7,24 @@ $conn = new mysqli("db", "root", "rootpass", "sistema_login");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
+
+    // Verificar se o e-mail existe no banco de dados
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Se o e-mail não estiver registrado
+    if ($result->num_rows == 0) {
+        // Redirecionar para a página de redefinir senha com um parâmetro de erro
+        header("Location: resetar_senha.php?erro=1");
+        exit();
+    }
+
     $token = bin2hex(random_bytes(4)); // Exemplo de token aleatório
     $expira = date("Y-m-d H:i:s", strtotime("+15 minutes"));
 
-    // Salva no banco de dados
+    // Salva o token e a data de expiração no banco de dados
     $stmt = $conn->prepare("UPDATE usuarios SET reset_token=?, reset_token_expira=? WHERE email=?");
     $stmt->bind_param("sss", $token, $expira, $email);
     $stmt->execute();
@@ -63,6 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1 class="text-3xl font-bold text-blue-900">Redefinir Senha</h1>
         <p class="text-blue-900 text-sm mt-2">Digite seu e-mail para receber o código de redefinição de senha.</p>
       </div>
+
+      <!-- Exibição de erro se o e-mail não estiver cadastrado -->
+      <?php if (isset($_GET['erro'])): ?>
+        <p class="text-red-600 text-sm mt-2">E-mail não cadastrado. Tente novamente com um e-mail válido.</p>
+      <?php endif; ?>
 
       <form method="POST" action="enviar_reset.php" class="mt-8 w-3/4">
         <input name="email" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="E-mail" type="email" required>
