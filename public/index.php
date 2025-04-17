@@ -13,17 +13,17 @@ $erro = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('conexao.php');
 
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $senha = $_POST['senha'];
 
-    $query = "SELECT * FROM usuarios WHERE username = '$username'";
+    $query = "SELECT * FROM usuarios WHERE email = '$email'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
 
         if (password_verify($senha, $user['senha'])) {
-            $_SESSION['username'] = $username;
+            $_SESSION['username'] = $user['username'];
             header("Location: home.php");
             exit();
         } else {
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <form method="POST" action="index.php" class="mt-8 w-3/4">
-        <input name="username" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Usuário" type="text" required>
+        <input name="email" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="E-mail" type="email" required>
         <input name="senha" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Senha" type="password" required>
 
         <?php if (!empty($erro)): ?>
@@ -67,8 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="w-full bg-blue-400 text-white py-2 rounded-full hover:bg-blue-500">LOGIN</button>
 
         <a href="register.php" class="text-blue-900 text-sm underline block text-center mt-4">Cadastrar</a>
-        <a href="#" class="text-blue-900 text-sm underline block text-center mb-4">Esqueceu a senha?</a>
+        <a href="resetar_senha.php" class="text-blue-900 text-sm underline block text-center mb-4">Esqueceu a senha?</a>
       </form>
+
     </div>
 
     <!-- LADO DIREITO - Ilustração -->

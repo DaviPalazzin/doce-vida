@@ -50,3 +50,7 @@ GET = Recuperar Recurso
 POST =  Criar Recurso
 PUT = Atuliza Recurso
 DELETE = Remove Recurso
+
+INICIAR EMAIL
+
+php -S localhost:8080
