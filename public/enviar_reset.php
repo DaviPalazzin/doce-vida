@@ -21,7 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $token = bin2hex(random_bytes(4)); // Exemplo de token aleatório
+    $token = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+ // Exemplo de token aleatório
     $expira = date("Y-m-d H:i:s", strtotime("+15 minutes"));
 
     // Salva o token e a data de expiração no banco de dados
@@ -29,29 +30,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sss", $token, $expira, $email);
     $stmt->execute();
 
-    // Envia o e-mail
     $mail = new PHPMailer(true);
 
     try {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'davipalazzin14@gmail.com';
-        $mail->Password = 'oeygqshaumcqnabj'; // Use a senha de aplicativo
+        $mail->Username = 'suporteprojetodocevida@gmail.com';
+        $mail->Password = 'bxab ihpe gwyx xpxi'; // senha de app
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
-
-        $mail->setFrom('davipalazzin14@gmail.com', 'Doce Vida');
+    
+        // 🔧 Define o charset correto
+        $mail->CharSet = 'UTF-8';
+    
+        $mail->setFrom('suporteprojetodocevida@gmail.com', 'Doce Vida');
         $mail->addAddress($email);
-
+    
         $mail->isHTML(true);
         $mail->Subject = 'Redefinição de Senha - Doce Vida';
         $mail->Body = "
-            <h2 style='color:#2563EB;'>Redefinição de Senha</h2>
-            <p>Você solicitou a redefinição da sua senha. Use o código abaixo:</p>
-            <h3 style='color:#2563EB;'>$token</h3>
-            <p>Este código expira em 15 minutos.</p>
-        ";
+        <div style='max-width: 600px; margin: auto; font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px; border-radius: 10px;'>
+          <div style='text-align: center;'>
+            <h1 style='color: #2563EB; font-size: 28px;'>🔒 Redefinição de Senha</h1>
+            <p style='font-size: 16px;'>Recebemos uma solicitação para redefinir sua senha no <strong>Doce Vida</strong>.</p>
+          </div>
+          <div style='background-color: white; padding: 30px; margin: 20px 0; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0,0,0,0.05);'>
+            <p style='font-size: 16px; margin-bottom: 10px;'>Use o código abaixo para redefinir sua senha:</p>
+            <div style='font-size: 24px; color: #2563EB; font-weight: bold; letter-spacing: 2px; margin: 20px 0;'>$token</div>
+            <p style='font-size: 14px; color: #888;'>Este código expira em <strong>15 minutos</strong>.</p>
+          </div>
+          <p style='font-size: 14px; color: #666;'>Se você não solicitou essa redefinição, pode ignorar este e-mail com segurança.</p>
+          <hr style='border: none; border-top: 1px solid #ddd; margin: 30px 0;'>
+          <div style='text-align: center; font-size: 12px; color: #aaa;'>
+            &copy; " . date('Y') . " Doce Vida • Todos os direitos reservados.
+          </div>
+        </div>
+      ";
+      
 
         $mail->send();
         header("Location: resetar_senha.php?sucesso=1&email=" . urlencode($email));
