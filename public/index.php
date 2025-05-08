@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['email'])) {
     header("Location: home.php");
     exit();
 }
@@ -23,14 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = mysqli_fetch_assoc($result);
 
         if (password_verify($senha, $user['senha'])) {
-            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
             header("Location: home.php");
             exit();
-        } else {
+        } else { 
             $erro = "Senha incorreta!";
         }
     } else {
-        $erro = "Usuário não encontrado!";
+      $erro = 'Usuário não encontrado! <br>Caso não tenha conta, <a href="register.php" class="text-inherit no-underline hover:no-underline">clique aqui!</a>.';
     }
 }
 ?>
