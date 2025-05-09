@@ -54,3 +54,5 @@ DELETE = Remove Recurso
 INICIAR EMAIL
 
 php -S localhost:8080
+
+DELETE FROM usuarios WHERE email = 'davipalazzin14@gmail.com';
