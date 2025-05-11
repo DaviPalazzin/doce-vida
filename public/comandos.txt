@@ -56,3 +56,7 @@ INICIAR EMAIL
 php -S localhost:8080
 
 DELETE FROM usuarios WHERE email = 'davipalazzin14@gmail.com';
+
+CODIGO PARA FAZER BACKUP DO MySQL
+docker exec mysql mysqldump -u root -prootpass sistema_login > backup.sql
+
