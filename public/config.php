@@ -20,268 +20,10 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
 
   <!-- CSS e Tailwind -->
   <link rel="stylesheet" href="public/css/style.css" />
+  <link rel="stylesheet" href="public/css/settings.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="public/script.js" defer></script>
-
-  <style>
-    :root {
-      --primary: #3182ce;
-      --primary-hover: #2c5282;
-      --dark-bg: #1a202c;
-      --dark-card: #2d3748;
-    }
-    
-    body {
-      background-color: #f8fafc;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-    
-    body.dark-mode {
-      background-color: var(--dark-bg);
-      color: #e2e8f0;
-    }
-    
-    body.dark-mode .settings-card,
-    body.dark-mode .settings-tabs {
-      background-color: var(--dark-card);
-      border-color: #4a5568;
-    }
-    
-    body.dark-mode .form-control {
-      background-color: #4a5568;
-      border-color: #4a5568;
-      color: #e2e8f0;
-    }
-    
-    body.dark-mode .form-label {
-      color: #e2e8f0;
-    }
-    
-    body.dark-mode .settings-title {
-      color: #e2e8f0;
-      border-color: #4a5568;
-    }
-
-    /* Layout de abas */
-    .settings-container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    
-    .settings-tabs {
-      display: flex;
-      border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 2rem;
-    }
-    
-    body.dark-mode .settings-tabs {
-      border-color: #4a5568;
-    }
-    
-    .settings-tab {
-      padding: 0.75rem 1.5rem;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s;
-      font-weight: 500;
-      color: #64748b;
-    }
-    
-    .settings-tab:hover {
-      color: var(--primary);
-    }
-    
-    .settings-tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-    
-    .settings-tab i {
-      margin-right: 0.5rem;
-      width: 20px;
-      text-align: center;
-    }
-    
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
-    }
-    
-    .settings-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-    
-    .settings-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-    
-    .form-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #334155;
-    }
-    
-    .form-control {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      transition: border 0.2s;
-      background-color: #f8fafc;
-      max-width: 500px;
-    }
-    
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
-    }
-    
-    .btn-save {
-      background-color: var(--primary);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    
-    .btn-save:hover {
-      background-color: var(--primary-hover);
-    }
-    
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-    }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #e2e8f0;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-      background-color: var(--primary);
-    }
-    
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .grid-cols-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-    
-    .color-option {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .color-sample {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-    }
-    
-    /* Estilos específicos para a seção de redefinição de senha */
-    .reset-password-container {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    
-    .reset-input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #3182ce;
-      border-radius: 9999px;
-      margin-bottom: 1rem;
-    }
-    
-    .reset-btn {
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #3182ce;
-      color: white;
-      border: none;
-      border-radius: 9999px;
-      cursor: pointer;
-    }
-    
-    .reset-btn:hover {
-      background-color: #2c5282;
-    }
-    
-    @media (max-width: 768px) {
-      .grid-cols-2 {
-        grid-template-columns: 1fr;
-      }
-      
-      .settings-tabs {
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -350,14 +92,9 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
               </div>
               
               <div class="form-group">
-                <label class="form-label">E-mail</label>
-                <input type="email" class="form-control" value="joao@exemplo.com">
+                <label class="form-label">Data de nascimento</label>
+                <input type="date" class="form-control" value="1990-01-01">
               </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Data de nascimento</label>
-              <input type="date" class="form-control" value="1990-01-01">
             </div>
             
             <div class="form-group">
@@ -473,13 +210,13 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
 
               <!-- Parte 1: Enviar código -->
               <div id="enviarParte">
-                <h2 class="text-2xl font-bold text-blue-900 text-center mb-4">Redefinir Senha</h2>
-                <p class="text-blue-900 text-sm text-center">Digite o seu e-mail para receber o código de redefinição.</p>
+                <h2 class="reset-title">Redefinir Senha</h2>
+                <p class="reset-subtitle">Digite o seu e-mail para receber o código de redefinição.</p>
 
                 <form method="POST" action="enviar_reset.php" class="w-full max-w-md mt-8">
                   <input name="email" class="reset-input" placeholder="E-mail" type="email" required>
                   <?php if (isset($_GET['erro'])): ?>
-                    <p class="text-red-600 text-sm mb-4 text-center">E-mail não cadastrado. Tente novamente com um e-mail válido.</p>
+                    <p class="reset-error">E-mail não cadastrado. Tente novamente com um e-mail válido.</p>
                   <?php endif; ?>
                   <button type="submit" class="reset-btn">Enviar Código</button>
                 </form>
@@ -487,13 +224,13 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
               
               <!-- Parte 2: Redefinir senha -->
               <div id="redefinirParte" class="hidden">
-                <h2 class="text-2xl font-bold text-blue-900 text-center mb-4">Redefinir Senha</h2>
-                <p class="text-blue-900 text-sm text-center mb-8">Digite o código enviado ao seu e-mail e a nova senha.</p>
+                <h2 class="reset-title">Redefinir Senha</h2>
+                <p class="reset-subtitle">Digite o código enviado ao seu e-mail e a nova senha.</p>
 
                 <!-- Cronômetro e botão -->
-                <div class="relative w-full max-w-md mt-2 mb-[-8px]">
-                  <p id="tempoRestante" class="absolute left-0 -top-6 text-xs text-blue-900">expira em: 15:00</p>
-                  <button id="reenviarCodigo" onclick="reenviarCodigo()" class="absolute right-0 -top-6 text-xs text-blue-900 underline hover:text-blue-700" disabled>Reenviar código</button>
+                <div class="reset-timer-container">
+                  <p id="tempoRestante" class="reset-timer">expira em: 15:00</p>
+                  <button id="reenviarCodigo" onclick="reenviarCodigo()" class="reset-resend" disabled>Reenviar código</button>
                 </div>
 
                 <form method="POST" action="processar_reset.php" class="w-full max-w-md mt-8">
@@ -510,34 +247,34 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
             <h2 class="settings-title">Sessões Ativas</h2>
             
             <div class="form-group">
-              <p class="text-sm text-gray-600 mb-2">Estes são os dispositivos que estão atualmente logados na sua conta.</p>
+              <p class="session-description">Estes são os dispositivos que estão atualmente logados na sua conta.</p>
               
-              <div class="border rounded-lg divide-y">
-                <div class="p-3 flex justify-between items-center">
+              <div class="session-list">
+                <div class="session-item">
                   <div>
-                    <p class="font-medium">Chrome - Windows 10</p>
-                    <p class="text-sm text-gray-500">São Paulo, BR • Agora mesmo</p>
+                    <p class="session-device">Chrome - Windows 10</p>
+                    <p class="session-info">São Paulo, BR • Agora mesmo</p>
                   </div>
-                  <button class="text-red-600 hover:underline text-sm">Sair</button>
+                  <button class="session-logout">Sair</button>
                 </div>
                 
-                <div class="p-3 flex justify-between items-center">
+                <div class="session-item">
                   <div>
-                    <p class="font-medium">Safari - iPhone</p>
-                    <p class="text-sm text-gray-500">Rio de Janeiro, BR • 2 horas atrás</p>
+                    <p class="session-device">Safari - iPhone</p>
+                    <p class="session-info">Rio de Janeiro, BR • 2 horas atrás</p>
                   </div>
-                  <button class="text-red-600 hover:underline text-sm">Sair</button>
+                  <button class="session-logout">Sair</button>
                 </div>
               </div>
             </div>
           </div>
           
-          <div class="settings-card bg-red-50 border-red-200">
-            <h2 class="settings-title text-red-800">Zona Perigosa</h2>
+          <div class="settings-card danger-zone">
+            <h2 class="danger-title">Zona Perigosa</h2>
             
             <div class="form-group">
-              <p class="text-sm text-gray-700 mb-4">Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.</p>
-              <button type="button" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm">
+              <p class="danger-description">Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.</p>
+              <button type="button" class="danger-btn">
                 Excluir minha conta permanentemente
               </button>
             </div>
