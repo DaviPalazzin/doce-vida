@@ -1,0 +1,52 @@
+----1) Para entrar no MySQL dentro do seu container Docker, siga esses passos:
+
+Acesse o container onde o MySQL está rodando:
+docker exec -it mysql bash
+
+Acessar o MySQL dentro do container:
+mysql -u root -p
+
+----2) Alguns comandos do mysql:
+
+USE [nome]; --> Escolhe o macro, o nome é sitema_login;
+SHOW TABLES; --> Mostra as tabelas;
+DESC horarios; --> Ver a estrutura da tabela; 
+EXIT; --> Sair do Mysql  
+
+
+----3) Como iniciar o arquivo
+
+== Certifique-se de que os containers Docker estão configurados corretamente
+
+Verifique se o Docker está funcionando
+docker --version
+
+Suba os containers com Docker Compose:
+docker-compose up -d
+
+== Verifique se o servidor Apache está funcionando
+
+Clique nela, e você verá o porto mapeado. Para o seu caso, está configurado para o porta 80:
+
+Verifique o log de containers
+docker-compose logs
+
+
+---- 4) Como ver o status de todos os usuarios 
+
+digite:
+SELECT u.username, h.horario, h.status
+FROM usuarios u
+JOIN horarios h ON u.id = h.usuario_id
+ORDER BY u.username, h.horario;
+
+
+-- Istalar o Composer com o Marco (talvez);
+composer require phpmailer/phpmailer
+
+
+-----5) Método http
+GET = Recuperar Recurso
+POST =  Criar Recurso
+PUT = Atuliza Recurso
+DELETE = Remove Recurso

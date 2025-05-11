@@ -1,4 +1,14 @@
+<?php
+session_start();
 
+// Verifica se o usuário está logado
+if (!isset($_SESSION['username'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: index.php");
+    exit();
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -33,7 +43,7 @@
 
         <button type="submit">Salvar Alterações</button>
         
-        <a href="telaini.html" class="voltar"><button class="Voltar">Voltar</button></a>
+        <a href="home.php" class="voltar"><button class="Voltar">Voltar</button></a>
     </form>
 </div>
 

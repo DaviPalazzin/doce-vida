@@ -1,8 +1,16 @@
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    foto_perfil VARCHAR(255) DEFAULT 'default.jpg'
-);
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `senha` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `usuarios` (`id`, `username`, `senha`) VALUES
+(1, 'admin', 'admin');
+
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+COMMIT;
