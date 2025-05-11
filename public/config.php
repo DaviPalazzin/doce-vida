@@ -325,6 +325,33 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
   </footer>
 
   <script>
+    // Atualize a função changeTab no seu arquivo config.php
+function changeTab(tabName) {
+  // Atualiza a URL sem recarregar a página
+  history.pushState(null, null, `?tab=${tabName}`);
+  
+  // Remove a classe active de todas as abas e conteúdos
+  document.querySelectorAll('.settings-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+  });
+  
+  // Adiciona a classe active na aba e conteúdo selecionados
+  const activeTab = document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`);
+  activeTab.classList.add('active');
+  document.getElementById(`${tabName}-tab`).classList.add('active');
+  
+  // Centraliza a aba ativa
+  if (activeTab) {
+    activeTab.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
+  }
+}
     // Controle das abas
     function changeTab(tabName) {
       // Atualiza a URL sem recarregar a página
