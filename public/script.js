@@ -18,7 +18,7 @@ const siteFunctions = [
     { name: "Caça Palavras", link: "#" },
     { name: "Aprenda a Comer", link: "#" },
     { name: "Configurações", link: "config.html" },
-    { name: "Perfil", link: "perfil.html" },
+    { name: "Perfil", link: "perfil.php" },
     { name: "Sobre Nós", link: "sobre.html" },
     { name: "Sair", link: "#" }
 ];

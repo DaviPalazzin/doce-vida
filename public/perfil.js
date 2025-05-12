@@ -1,166 +1,211 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos
-    const usernameElement = document.getElementById('username');
-    const usernameEditInput = document.getElementById('username-edit-input');
-    const editUsernameBtn = document.querySelector('.edit-username');
-    const usernameModal = document.getElementById('username-modal');
-    const saveUsernameBtn = document.getElementById('save-username');
-    const cancelUsernameBtn = document.getElementById('cancel-username');
-
-    const bioText = document.getElementById('bio-text');
-    const bioEditInput = document.getElementById('bio-edit-input');
-    const editBioBtn = document.querySelector('.edit-bio');
-    const bioModal = document.getElementById('bio-modal');
-    const saveBioBtn = document.getElementById('save-bio');
-    const cancelBioBtn = document.getElementById('cancel-bio');
-
-    const promoInput = document.getElementById('promo-input');
-    const promoEditInput = document.getElementById('promo-edit-input');
-    const editPromoBtn = document.querySelector('.edit-promo');
-    const promoModal = document.getElementById('promo-modal');
-    const savePromoBtn = document.getElementById('save-promo');
-    const cancelPromoBtn = document.getElementById('cancel-promo');
-
-    const changePhotoBtn = document.getElementById('change-photo-btn');
-    const photoModal = document.getElementById('photo-modal');
-    const fileInput = document.getElementById('file-input');
-    const uploadArea = document.getElementById('upload-area');
-    const imagePreview = document.getElementById('image-preview');
-    const previewImg = document.getElementById('preview-img');
-    const savePhotoBtn = document.getElementById('save-photo');
-    const cancelPhotoBtn = document.getElementById('cancel-photo');
-    const profilePicture = document.getElementById('profile-picture');
-
-    const contactEmail = document.getElementById('contact-email');
-    const editContactBtn = document.querySelector('.edit-contact');
-    const emailModal = document.getElementById('email-modal');
-    const emailEditInput = document.getElementById('email-edit-input');
-    const saveEmailBtn = document.getElementById('save-email');
-    const cancelEmailBtn = document.getElementById('cancel-email');
-
+    // Elementos principais
     const backButton = document.getElementById('back-button');
-
-    // Editar Nome de Usuário
-    editUsernameBtn.addEventListener('click', () => {
-        usernameEditInput.value = usernameElement.firstChild.textContent.trim();
-        usernameModal.style.display = 'flex';
+    const changePhotoBtn = document.getElementById('change-photo-btn');
+    const editUsernameBtn = document.querySelector('.edit-username');
+    const editBioBtn = document.querySelector('.edit-bio');
+    const healthBtn = document.getElementById('health-btn');
+    
+    // Modais
+    const modals = {
+        username: document.getElementById('username-modal'),
+        bio: document.getElementById('bio-modal'),
+        photo: document.getElementById('photo-modal'),
+        health: document.getElementById('health-modal')
+    };
+    
+    // Elementos de formulário
+    const usernameInput = document.getElementById('username-edit-input');
+    const bioInput = document.getElementById('bio-edit-input');
+    const fileInput = document.getElementById('file-input');
+    const previewImg = document.getElementById('preview-img');
+    const imagePreview = document.getElementById('image-preview');
+    const profilePicture = document.getElementById('profile-picture');
+    
+    // Botões de salvar
+    const saveUsernameBtn = document.getElementById('save-username');
+    const saveBioBtn = document.getElementById('save-bio');
+    const savePhotoBtn = document.getElementById('save-photo');
+    
+    // Botões de cancelar
+    const cancelButtons = {
+        username: document.getElementById('cancel-username'),
+        bio: document.getElementById('cancel-bio'),
+        photo: document.getElementById('cancel-photo'),
+        health: document.getElementById('close-health')
+    };
+    
+    // Avatar options
+    const avatarOptions = document.querySelectorAll('.avatar-option');
+    
+    // Event Listeners
+    backButton.addEventListener('click', () => {
+        window.history.back();
     });
-
-    saveUsernameBtn.addEventListener('click', () => {
-        usernameElement.firstChild.textContent = usernameEditInput.value;
-        usernameModal.style.display = 'none';
-    });
-
-    cancelUsernameBtn.addEventListener('click', () => {
-        usernameModal.style.display = 'none';
-    });
-
-    // Editar Biografia
-    editBioBtn.addEventListener('click', () => {
-        bioEditInput.value = bioText.textContent;
-        bioModal.style.display = 'flex';
-    });
-
-    saveBioBtn.addEventListener('click', () => {
-        bioText.textContent = bioEditInput.value;
-        bioModal.style.display = 'none';
-    });
-
-    cancelBioBtn.addEventListener('click', () => {
-        bioModal.style.display = 'none';
-    });
-
-    // Editar Texto Promocional
-    editPromoBtn.addEventListener('click', () => {
-        promoEditInput.value = promoInput.value;
-        promoModal.style.display = 'flex';
-    });
-
-    promoInput.addEventListener('click', () => {
-        promoEditInput.value = promoInput.value;
-        promoModal.style.display = 'flex';
-    });
-
-    savePromoBtn.addEventListener('click', () => {
-        promoInput.value = promoEditInput.value;
-        promoModal.style.display = 'none';
-    });
-
-    cancelPromoBtn.addEventListener('click', () => {
-        promoModal.style.display = 'none';
-    });
-
-    // Trocar Foto de Perfil
+    
+    // Abrir modais
     changePhotoBtn.addEventListener('click', () => {
-        photoModal.style.display = 'flex';
+        modals.photo.style.display = 'flex';
     });
-
-    uploadArea.addEventListener('click', () => {
-        fileInput.click();
+    
+    editUsernameBtn.addEventListener('click', () => {
+        usernameInput.value = document.getElementById('username').textContent.replace(' javvzzy', '').trim();
+        modals.username.style.display = 'flex';
     });
-
+    
+    editBioBtn.addEventListener('click', () => {
+        bioInput.value = document.getElementById('bio-text').textContent.trim();
+        modals.bio.style.display = 'flex';
+    });
+    
+    healthBtn.addEventListener('click', () => {
+        modals.health.style.display = 'flex';
+    });
+    
+    // Selecionar avatar
+    avatarOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            avatarOptions.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            imagePreview.style.display = 'none';
+        });
+    });
+    
+    // Upload de imagem
     fileInput.addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-            const file = e.target.files[0];
-            if (file.type.includes('image')) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewImg.src = event.target.result;
-                    imagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Por favor, selecione uma imagem válida!');
-            }
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                previewImg.src = event.target.result;
+                imagePreview.style.display = 'block';
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+            };
+            reader.readAsDataURL(file);
         }
     });
-
-    savePhotoBtn.addEventListener('click', () => {
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            if (file.type.includes('image')) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    profilePicture.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+    
+    // Salvar alterações
+    saveUsernameBtn.addEventListener('click', function() {
+        const usernameElement = document.getElementById('username');
+        usernameElement.textContent = usernameInput.value + ' ';
+        
+        // Recria o ícone de edição
+        const editIcon = document.createElement('i');
+        editIcon.className = 'fas fa-pencil-alt edit-username';
+        usernameElement.appendChild(editIcon);
+        
+        // Reatacha o event listener
+        editIcon.addEventListener('click', () => {
+            usernameInput.value = usernameElement.textContent.replace(' javvzzy', '').trim();
+            modals.username.style.display = 'flex';
+        });
+        
+        modals.username.style.display = 'none';
+    });
+    
+    saveBioBtn.addEventListener('click', function() {
+        const bioTextElement = document.getElementById('bio-text');
+        bioTextElement.textContent = bioInput.value + ' ';
+        
+        // Recria o ícone de edição
+        const editIcon = document.createElement('i');
+        editIcon.className = 'fas fa-pencil-alt edit-bio';
+        bioTextElement.appendChild(editIcon);
+        
+        // Reatacha o event listener
+        editIcon.addEventListener('click', () => {
+            bioInput.value = bioTextElement.textContent.trim();
+            modals.bio.style.display = 'flex';
+        });
+        
+        modals.bio.style.display = 'none';
+    });
+    
+    savePhotoBtn.addEventListener('click', function() {
+        // Verifica se tem uma imagem enviada
+        if (previewImg.src && previewImg.src !== '#') {
+            profilePicture.src = previewImg.src;
+        } 
+        // Se não, verifica se tem um avatar selecionado
+        else {
+            const selectedAvatar = document.querySelector('.avatar-option.selected img');
+            if (selectedAvatar) {
+                profilePicture.src = selectedAvatar.src;
             }
         }
-        photoModal.style.display = 'none';
-    });
-
-    cancelPhotoBtn.addEventListener('click', () => {
+        
+        modals.photo.style.display = 'none';
         fileInput.value = '';
         imagePreview.style.display = 'none';
-        photoModal.style.display = 'none';
     });
-
-    // Editar Email
-    editContactBtn.addEventListener('click', () => {
-        emailEditInput.value = contactEmail.firstChild.textContent.trim();
-        emailModal.style.display = 'flex';
+    
+    // Fechar modais
+    Object.keys(cancelButtons).forEach(key => {
+        if (cancelButtons[key]) {
+            cancelButtons[key].addEventListener('click', () => {
+                modals[key].style.display = 'none';
+                
+                // Resetar o upload de foto ao cancelar
+                if (key === 'photo') {
+                    fileInput.value = '';
+                    imagePreview.style.display = 'none';
+                }
+            });
+        }
     });
-
-    saveEmailBtn.addEventListener('click', () => {
-        contactEmail.firstChild.textContent = emailEditInput.value;
-        emailModal.style.display = 'none';
+    
+    // Fechar ao clicar fora
+    window.addEventListener('click', function(event) {
+        Object.values(modals).forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                
+                // Resetar o upload de foto ao clicar fora
+                if (modal.id === 'photo-modal') {
+                    fileInput.value = '';
+                    imagePreview.style.display = 'none';
+                }
+            }
+        });
     });
-
-    cancelEmailBtn.addEventListener('click', () => {
-        emailModal.style.display = 'none';
+    
+    // Efeitos visuais
+    const actionButtons = document.querySelectorAll('.action-btn');
+    actionButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     });
-
-    // Botão Voltar
-    backButton.addEventListener('click', () => {
-        window.location.href = "telaini.html"; // Altere para sua página inicial
+    
+    // Animar progresso
+    setTimeout(() => {
+        const xpFill = document.getElementById('xp-fill');
+        if (xpFill) {
+            xpFill.style.width = '65%';
+        }
+    }, 500);
+    
+    // Animar conquistas
+    const achievements = document.querySelectorAll('.achievement');
+    achievements.forEach((achievement, index) => {
+        setTimeout(() => {
+            achievement.style.opacity = '1';
+            achievement.style.transform = 'translateY(0)';
+        }, index * 150);
     });
-
-    // Fechar modais ao clicar fora
-    window.addEventListener('click', (event) => {
-        if (event.target === usernameModal) usernameModal.style.display = 'none';
-        if (event.target === bioModal) bioModal.style.display = 'none';
-        if (event.target === promoModal) promoModal.style.display = 'none';
-        if (event.target === photoModal) photoModal.style.display = 'none';
-        if (event.target === emailModal) emailModal.style.display = 'none';
-    });
+    
+    // Efeito de brilho na barra de XP
+    setInterval(() => {
+        const xpBar = document.querySelector('.xp-bar');
+        if (xpBar) {
+            xpBar.style.boxShadow = '0 0 15px rgba(58, 91, 255, 0.7)';
+            setTimeout(() => {
+                xpBar.style.boxShadow = 'none';
+            }, 1000);
+        }
+    }, 3000);
 });

@@ -12,7 +12,7 @@ if (!isset($_SESSION['email'])) {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $pageTitle ?? 'Doce Vida' ?></title>
-  <link rel="stylesheet" href="public/css/style.css" />
+  <link rel="stylesheet" href="public/css/style.css"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="public/script.js" defer></script>

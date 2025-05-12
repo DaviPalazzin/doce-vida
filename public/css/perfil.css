@@ -1,170 +1,407 @@
 :root {
     --primary-color: #3a5bff;
-    --dark-bg: #1a1a1a;
-    --card-bg: #252525;
-    --text-light: #e0e0e0;
-    --text-gray: #a0a0a0;
+    --primary-dark: #2a4bdf;
+    --secondary-color: #ffc107;
+    --accent-color: #ff5252;
+    --dark-bg: #121212;
+    --darker-bg: #0a0a0a;
+    --card-bg: #1e1e1e;
+    --card-border: #333;
+    --text-light: #ffffff;
+    --text-gray: #b0b0b0;
+    --text-dark: #222;
+    --xp-fill: linear-gradient(90deg, #3a5bff, #00bcd4);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: var(--dark-bg);
     color: var(--text-light);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
 }
 
 .fullscreen-profile {
-    width: 100%;
-    max-width: 350px;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
 }
 
-/* Botão Voltar */
+.profile-header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.profile-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .back-button {
-    background-color: transparent;
-    color: var(--primary-color);
+    background-color: var(--card-bg);
+    color: var(--text-light);
     border: none;
-    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: background-color 0.2s;
+    transition: all 0.3s;
+    z-index: 1;
 }
 
 .back-button:hover {
-    background-color: rgba(58, 91, 255, 0.1);
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
 }
 
-.profile-header {
+/* Seção do Avatar */
+.avatar-section {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
     margin-bottom: 15px;
 }
 
-.profile-header h1 {
-    font-size: 24px;
-    margin: 0;
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(58, 91, 255, 0.5);
+}
+
+.change-photo-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    background-color: var(--primary-color);
     color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.change-photo-btn:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.profile-identity {
+    text-align: center;
+}
+
+.profile-identity h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.edit-username, .edit-bio {
+    color: var(--secondary-color);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.edit-username:hover, .edit-bio:hover {
+    transform: rotate(15deg);
+}
+
+.level-badge {
+    background-color: var(--card-bg);
+    border: 2px solid var(--secondary-color);
+    border-radius: 20px;
+    padding: 5px 15px;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+.level-icon {
+    color: var(--secondary-color);
+}
+
+/* Barra de Progresso */
+.progress-section {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.progress-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+}
+
+.xp-counter {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: bold;
+}
+
+.xp-bar {
+    height: 12px;
+    background-color: #333;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.xp-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+    animation: shine 2s infinite;
+}
+
+.xp-fill {
+    height: 100%;
+    background: var(--xp-fill);
+    border-radius: 6px;
+    width: 0;
+    transition: width 1s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Seção de Informações */
+.player-info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: var(--primary-color);
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.edit-username, .edit-bio, .edit-promo, .edit-contact {
-    color: var(--primary-color);
-    cursor: pointer;
-    font-size: 16px;
+.health-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
-.status-badge {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.contact-info {
-    margin-bottom: 20px;
-}
-
-.contact-info p {
-    margin: 10px 0;
-    color: var(--text-gray);
-    font-size: 14px;
-    position: relative;
-}
-
-.bio-section {
-    position: relative;
-    margin-bottom: 25px;
-    background-color: var(--card-bg);
-    padding: 15px;
+.metric {
+    background-color: rgba(58, 91, 255, 0.1);
     border-radius: 8px;
+    padding: 10px;
+    text-align: center;
 }
 
-.bio {
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    display: block;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    display: block;
+}
+
+.bio-card {
+    grid-column: span 2;
+}
+
+.bio-card p {
     margin: 0;
-    color: var(--text-light);
-    word-break: break-word;
+    line-height: 1.5;
+    position: relative;
+    padding-right: 25px;
 }
 
 .edit-bio {
     position: absolute;
-    right: 15px;
-    top: 15px;
-}
-
-.promo-section {
-    background-color: var(--card-bg);
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    position: relative;
-}
-
-#promo-input {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: var(--dark-bg);
-    border: 2px solid #444;
-    border-radius: 6px;
-    color: var(--text-light);
-    font-family: inherit;
-    font-size: 14px;
-    box-sizing: border-box;
-    resize: none;
-    height: 60px;
-}
-
-.edit-promo {
-    position: absolute;
-    right: 25px;
-    bottom: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.menu-options {
-    margin-top: 20px;
-}
-
-.section-title {
-    color: var(--text-gray);
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.menu-btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: var(--card-bg);
-    color: var(--text-light);
-    border: none;
-    border-radius: 6px;
-    margin-bottom: 8px;
-    text-align: left;
+    right: 0;
+    top: 0;
+    color: var(--secondary-color);
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
-.menu-btn:hover {
+/* Seção de Conquistas */
+.achievements-section {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.achievements-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.achievement.unlocked {
+    border-left: 4px solid var(--secondary-color);
+}
+
+.achievement.locked {
+    opacity: 0.6;
+}
+
+.achievement-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
     background-color: #333;
 }
 
-/* Modal Styles */
+.achievement-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.achievement-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-gray);
+}
+
+/* Menu de Ações */
+.actions-menu {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.action-btn {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(58, 91, 255, 0.4);
+}
+
+.action-btn i {
+    font-size: 1.2rem;
+}
+
+.health-btn {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.health-btn:hover {
+    background-color: rgba(76, 175, 80, 0.3);
+}
+
+/* Modais */
 .modal {
     display: none;
     position: fixed;
@@ -172,58 +409,65 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: var(--dark-bg);
+    background-color: var(--darker-bg);
+    border-radius: 12px;
     padding: 25px;
-    border-radius: 10px;
     width: 90%;
     max-width: 400px;
-    border: 1px solid #333;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 30px rgba(58, 91, 255, 0.3);
 }
 
 .modal h3 {
     margin-top: 0;
-    color: white;
-    font-size: 18px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 input, textarea {
     width: 100%;
-    padding: 15px;
+    padding: 12px 15px;
     margin-bottom: 15px;
     background-color: var(--card-bg);
-    border: 2px solid #444;
-    border-radius: 6px;
+    border: 2px solid #333;
+    border-radius: 8px;
     color: var(--text-light);
     font-family: inherit;
-    font-size: 14px;
-    box-sizing: border-box;
+    font-size: 1rem;
+    transition: all 0.3s;
 }
 
-textarea {
-    height: 100px;
-    resize: none;
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(58, 91, 255, 0.5);
 }
 
 .modal-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .modal-buttons button {
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border-radius: 8px;
     border: none;
+    font-weight: bold;
     cursor: pointer;
-    font-weight: 500;
+    transition: all 0.3s;
 }
 
 .modal-buttons button:first-child {
@@ -236,67 +480,122 @@ textarea {
     color: white;
 }
 
-/* Estilos para a foto de perfil */
-.profile-picture-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 20px;
+.modal-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.profile-picture {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary-color);
+/* Avatar Modal */
+.avatar-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.change-photo-btn {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    width: 32px;
-    height: 32px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-/* Estilos para o modal de upload */
-.upload-area {
-    border: 2px dashed #444;
+.avatar-option {
     border-radius: 8px;
-    padding: 30px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.avatar-option:hover {
+    transform: scale(1.05);
+}
+
+.avatar-option.selected {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 15px var(--secondary-color);
+}
+
+.avatar-option img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1/1;
+}
+
+.upload-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 20px;
     text-align: center;
-    margin: 15px 0;
+    margin-bottom: 20px;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .upload-area:hover {
-    border-color: var(--primary-color);
+    background-color: rgba(58, 91, 255, 0.1);
 }
 
-.upload-icon {
-    font-size: 40px;
+.upload-area i {
+    font-size: 2rem;
     color: var(--primary-color);
     margin-bottom: 10px;
 }
 
+.upload-area p {
+    margin: 0;
+    color: var(--text-gray);
+}
+
 .image-preview {
-    max-height: 200px;
     margin: 15px 0;
     display: none;
+    text-align: center;
 }
 
 .image-preview img {
     max-width: 100%;
     max-height: 200px;
     border-radius: 8px;
+}
+
+/* Health Tips Modal */
+.health-tips {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.health-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.1);
+    border-radius: 8px;
+}
+
+.health-tip i {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    margin-top: 3px;
+}
+
+.health-tip p {
+    margin: 0;
+    flex: 1;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .player-info-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .bio-card {
+        grid-column: span 1;
+    }
+    
+    .health-metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    .avatar-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
