@@ -3,6 +3,7 @@ $pageTitle = "Página Inicial";
 require './partials/header.php';
 require './partials/menu.php';
 ?>
+<link rel="stylesheet" href="css/home.css">
 
 <main class="main-content">
   <section class="grid-container">

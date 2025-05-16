@@ -108,7 +108,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <form method="POST" action="register.php" class="mt-8 w-3/4">
         <input name="email" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" type="email" placeholder="E-mail" required>
-        <input name="username" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Nome" type="text" required>
+       <input name="username" class="w-full px-4 py-2 mb-2 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Nome completo" type="text" required>
+<p class="text-xs text-blue-800 mb-4 text-center">⚠️ O nome completo não poderá ser alterado depois do cadastro.</p>
+
         <input name="senha" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Senha" type="password" required>
 
         <?php if (!empty($erro)): ?>

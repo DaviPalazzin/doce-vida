@@ -17,9 +17,9 @@ document.addEventListener('click', function(event) {
 const siteFunctions = [
     { name: "Caça Palavras", link: "#" },
     { name: "Aprenda a Comer", link: "#" },
-    { name: "Configurações", link: "config.html" },
+    { name: "Configurações", link: "config.php" },
     { name: "Perfil", link: "perfil.php" },
-    { name: "Sobre Nós", link: "sobre.html" },
+    { name: "Sobre Nós", link: "sobre.php" },
     { name: "Sair", link: "#" }
 ];
 
