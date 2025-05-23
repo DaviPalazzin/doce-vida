@@ -1,18 +1,9 @@
-
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - javvzzy</title>
-    <link rel="stylesheet" href="css/perfil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-
-
-
+<?php
+$pageTitle = "Perfil - javvzzy";
+require './partials/header.php';
+require './partials/menu.php';
+?>
+<link rel="stylesheet" href="css/perfil.css">
 <div class="fullscreen-profile">
     <div class="profile-header-container">
         <button class="back-button" id="back-button">
@@ -202,5 +193,6 @@
 
 <script src="./perfil.js"></script>
 
-</body>
-</html>
+<?php
+require './partials/footer.php';
+?>

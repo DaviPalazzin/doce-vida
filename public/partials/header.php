@@ -77,7 +77,7 @@ if (!isset($_SESSION['email'])) {
       cursor: pointer;
     }
 
-    .user-avatar {
+    .user-avatar- {
       border-radius: 9999px;
     }
   </style>
@@ -128,6 +128,6 @@ if (!isset($_SESSION['email'])) {
       <div id="searchResults"></div>
     </nav>
     <div class="profile-btn" onclick="toggleMenu()">
-      <img class="user-avatar" src="img/perfil.jpg" alt="Foto de perfil" width="40px" />
+      <img class="user-avatar-" src="img/perfil.jpg" alt="Foto de perfil" width="40px" />
     </div>
   </header>
