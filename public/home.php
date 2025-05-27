@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Página Inicial";
+$mostrarVoltar = false;
 require './partials/header.php';
 require './partials/menu.php';
 ?>

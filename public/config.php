@@ -1,4 +1,5 @@
 <?php
+$mostrarVoltar = true;
 require './partials/header.php';
 require './partials/menu.php';
 

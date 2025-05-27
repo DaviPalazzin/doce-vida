@@ -5,6 +5,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -28,8 +29,44 @@ if (!isset($_SESSION['email'])) {
       border-bottom: 1px solid #ccc;
     }
 
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
     .logo img {
       max-height: 60px;
+    }
+
+    .botao-voltar {
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white;
+      width: 120px;
+      height: 40px;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .botao-voltar:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .botao-voltar i {
+      margin-right: 0.4rem;
     }
 
     .search-container {
@@ -81,6 +118,7 @@ if (!isset($_SESSION['email'])) {
       border-radius: 9999px;
     }
   </style>
+
   <script>
     const siteFunctions = [
       { name: "Caça Palavras", link: "#" },
@@ -118,16 +156,28 @@ if (!isset($_SESSION['email'])) {
   </script>
 </head>
 <body>
+  
   <header class="header">
     <div class="logo">
       <img src="img/logo.png" alt="logo doce vida" />
+      <?php if (!empty($mostrarVoltar) && $mostrarVoltar): ?>
+        <a href="home.php" class="botao-voltar">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+      <?php endif; ?>
     </div>
+
     <nav class="search-container">
-      <input type="text" id="searchBar" placeholder="Buscar..." onkeyup="searchFunction()">
-      <i class="fas fa-search search-icon"></i>
+      <?php if (empty($mostrarVoltar) || !$mostrarVoltar): ?>
+        <input type="text" id="searchBar" placeholder="Buscar..." onkeyup="searchFunction()">
+        <i class="fas fa-search search-icon"></i>
+      <?php endif; ?>
       <div id="searchResults"></div>
     </nav>
+
     <div class="profile-btn" onclick="toggleMenu()">
       <img class="user-avatar-" src="img/perfil.jpg" alt="Foto de perfil" width="40px" />
     </div>
   </header>
+
+  
