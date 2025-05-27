@@ -2,7 +2,7 @@
   <ul>
     <li><a href="perfil.php"><i class="fas fa-user"></i> Perfil</a></li>
     <li><a href="config.php"><i class="fas fa-cog"></i> Configurações</a></li>
-    <li><a href="ranking.php"><i class="fas fa-trophy"></i> Ranking</a></li>
+<!--<li><a href="ranking.php"><i class="fas fa-trophy"></i> Ranking</a></li>-->
     <li><a href="loja.php"><i class="fas fa-store"></i> Loja</a></li>
     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
   </ul>
