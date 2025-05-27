@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz - Controle do Diabetes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Quiz: Aprenda sobre o Diabetes</h1>
+    <div id="question-box">
+      <p id="question"></p>
+      <div id="options"></div>
+      <input type="text" id="text-answer" placeholder="Digite sua resposta" style="display: none;">
+    </div>
+    <p id="timer">Tempo restante: 20s</p>
+    <button id="next-btn" style="display:none;">Próxima</button>
+    <button id="homeButton" class="home-button">Voltar ao Início</button> <!-- Novo botão -->
+    <p id="result"></p>
+  </div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>
