@@ -5,12 +5,24 @@ require './partials/menu.php';
 
 // Determina a aba ativa
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
+
+// Conecta ao banco de dados e busca o nome do usuário usando o email da sessão
+include('conexao.php');
+$email = $_SESSION['email']; // Usando o email da sessão
+$query = "SELECT username FROM usuarios WHERE email = '$email'";
+$result = mysqli_query($conn, $query);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    $user_data = mysqli_fetch_assoc($result);
+    $username = $user_data['username'];
+} else {
+    $username = "Usuário"; // Valor padrão caso não encontre
+}
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
+<!-- ... (cabeçalho permanece o mesmo) ... -->
 
 <head>
   <meta charset="utf-8" />
@@ -53,21 +65,28 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
       <!-- Conteúdo das abas -->
       <form method="POST" action="config.php">
         <!-- ABA CONTA -->
-        <div id="conta-tab" class="tab-content <?= $active_tab === 'conta' ? 'active' : '' ?>">
-          <div class="settings-card">
-            <h2 class="settings-title">Informações Pessoais</h2>
-            
-            <div class="grid-cols-2">
-              <div class="form-group">
-                <label class="form-label">Nome completo</label>
-                <input type="text" class="form-control" value="João Silva">
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Data de nascimento</label>
-                <input type="date" class="form-control" value="1990-01-01">
-              </div>
-            </div>
+<div id="conta-tab" class="tab-content <?= $active_tab === 'conta' ? 'active' : '' ?>">
+  <div class="settings-card">
+    <h2 class="settings-title">Informações Pessoais</h2>
+    
+    <div class="grid-cols-2">
+      <div class="form-group">
+        <label class="form-label">Nome completo</label>
+        <div class="form-control-static">
+          <?= htmlspecialchars($username) ?>
+          <span class="text-sm text-gray-500 ml-2">
+            <i class="fas fa-lock"></i> 
+          </span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Data de nascimento</label>
+        <input type="date" class="form-control" value="1990-01-01">
+      </div>
+    </div>
+    
+    <!-- ... (restante do código permanece igual) ... -->
             
             <div class="form-group">
               <label class="form-label">Sexo</label>
@@ -87,6 +106,8 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
             </button>
           </div>
         </div>
+        
+        <!-- Restante do código permanece igual -->
         
         <!-- ABA JOGOS -->
         <div id="jogos-tab" class="tab-content <?= $active_tab === 'jogos' ? 'active' : '' ?>">
