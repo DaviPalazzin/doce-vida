@@ -1,15 +1,12 @@
 <?php
 $pageTitle = "Perfil - javvzzy";
-$mostrarVoltar = true;
+$mostrarVoltar = false;
 require './partials/header.php';
 require './partials/menu.php';
 ?>
 <link rel="stylesheet" href="css/perfil.css">
 <div class="fullscreen-profile">
     <div class="profile-header-container">
-        <button class="back-button" id="back-button">
-            <i class="fas fa-arrow-left"></i> Voltar
-        </button>
         <h1 class="profile-title">MEU PERFIL</h1>
     </div>
 
@@ -24,40 +21,11 @@ require './partials/menu.php';
             </div>
             <div class="profile-identity">
                 <h2 id="username">javvzzy <i class="fas fa-pencil-alt edit-username"></i></h2>
-                <div class="level-badge">
-                    <span class="level-icon"><i class="fas fa-shield-alt"></i></span>
-                    <span class="level-text">Nível 5</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Barra de Progresso -->
-        <div class="progress-section">
-            <div class="progress-header">
-                <h3>PROGRESSO</h3>
-                <span class="xp-counter">650/1000 XP</span>
-            </div>
-            <div class="xp-bar">
-                <div class="xp-fill" id="xp-fill"></div>
             </div>
         </div>
 
         <!-- Seção de Informações -->
         <div class="player-info-section">
-            <div class="info-card">
-                <h3><i class="fas fa-heartbeat"></i> SAÚDE</h3>
-                <div class="health-metrics">
-                    <div class="metric">
-                        <span class="metric-value">85%</span>
-                        <span class="metric-label">Conhecimento</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-value">12</span>
-                        <span class="metric-label">Conquistas</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="info-card bio-card">
                 <h3><i class="fas fa-book-open"></i> BIO</h3>
                 <p id="bio-text">Oi! Estou aprendendo sobre prevenção da diabetes! <i class="fas fa-pencil-alt edit-bio"></i></p>
@@ -100,9 +68,6 @@ require './partials/menu.php';
 
         <!-- Menu de Ações -->
         <div class="actions-menu">
-            <button class="action-btn health-btn" id="health-btn">
-                <i class="fas fa-heartbeat"></i> Dicas de Saúde
-            </button>
             <button class="action-btn">
                 <i class="fas fa-gamepad"></i> Meus Jogos
             </button>
@@ -137,57 +102,44 @@ require './partials/menu.php';
 </div>
 
 <div class="modal" id="photo-modal">
-    <div class="modal-content">
-        <h3>ALTERAR AVATAR</h3>
-        <div class="avatar-options">
-            <div class="avatar-option selected">
-                <img src="https://i.imgur.com/JqYeS5n.jpg" alt="Avatar 1">
-            </div>
-            <div class="avatar-option">
-                <img src="https://i.imgur.com/abc123.jpg" alt="Avatar 2">
-            </div>
-            <div class="avatar-option">
-                <img src="https://i.imgur.com/def456.jpg" alt="Avatar 3">
-            </div>
+    <div class="modal-content photo-modal-content">
+        <div class="modal-header">
+            <h3>ALTERAR AVATAR</h3>
+            <div class="header-divider"></div>
         </div>
-        <div class="upload-area" id="upload-area">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>Enviar imagem personalizada</p>
-            <input type="file" id="file-input" accept="image/*">
-        </div>
-        <div class="image-preview" id="image-preview" style="display: none;">
-            <img id="preview-img" src="#" alt="Pré-visualização">
-        </div>
-        <div class="modal-buttons">
-            <button id="cancel-photo">Cancelar</button>
-            <button id="save-photo">Salvar</button>
-        </div>
-    </div>
-</div>
 
-<div class="modal" id="health-modal">
-    <div class="modal-content">
-        <h3><i class="fas fa-heartbeat"></i> DICAS DE SAÚDE</h3>
-        <div class="health-tips">
-            <div class="health-tip">
-                <i class="fas fa-apple-alt"></i>
-                <p>Prefira alimentos integrais e ricos em fibras para manter estáveis os níveis de glicose</p>
+        <div class="image-preview" id="image-preview" style="display: none;">
+            <div class="preview-header">
+                <i class="fas fa-check-circle preview-icon"></i>
+                <span>PRÉ-VISUALIZAÇÃO</span>
             </div>
-            <div class="health-tip">
-                <i class="fas fa-glass-whiskey"></i>
-                <p>Beba água regularmente e evite bebidas açucaradas</p>
-            </div>
-            <div class="health-tip">
-                <i class="fas fa-running"></i>
-                <p>30 minutos de atividade física diária ajudam na prevenção</p>
-            </div>
-            <div class="health-tip">
-                <i class="fas fa-moon"></i>
-                <p>Durma bem - a falta de sono pode afetar o controle glicêmico</p>
+            <div class="preview-image-container">
+                <img id="preview-img" src="#" alt="Pré-visualização">
             </div>
         </div>
-        <div class="modal-buttons">
-            <button id="close-health">Fechar</button>
+        
+        <div class="upload-container">
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p class="upload-text">Clique para selecionar ou arraste uma imagem</p>
+                <p class="file-requirements">Formatos suportados: JPG, PNG (Máx. 5MB)</p>
+                
+                <label class="file-input-label">
+                    Selecionar Arquivo
+                    <input type="file" id="file-input" accept="image/*">
+                </label>
+                
+                <div class="file-name-display" id="file-name-display"></div>
+            </div>
+            
+            
+        </div>
+        
+        <div class="modal-footer">
+            <button class="cancel-btn" id="cancel-photo">Cancelar</button>
+            <button class="confirm-btn" id="save-photo">Aplicar Alteração</button>
         </div>
     </div>
 </div>

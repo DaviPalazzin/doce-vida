@@ -10,7 +10,6 @@
     --text-light: #ffffff;
     --text-gray: #b0b0b0;
     --text-dark: #222;
-    --xp-fill: linear-gradient(90deg, #3a5bff, #00bcd4);
 }
 
 * {
@@ -38,36 +37,14 @@ body {
     align-items: center;
     margin-bottom: 30px;
     position: relative;
+    justify-content: center;
 }
 
 .profile-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 1.5rem;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-.back-button {
-    background-color: var(--card-bg);
-    color: var(--text-light);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s;
-    z-index: 1;
-}
-
-.back-button:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-2px);
 }
 
 /* Seção do Avatar */
@@ -157,77 +134,8 @@ body {
     color: var(--secondary-color);
 }
 
-/* Barra de Progresso */
-.progress-section {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.progress-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-}
-
-.xp-counter {
-    font-size: 0.9rem;
-    color: var(--text-gray);
-    font-weight: bold;
-}
-
-.xp-bar {
-    height: 12px;
-    background-color: #333;
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-}
-
-.xp-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.1), 
-        transparent);
-    animation: shine 2s infinite;
-}
-
-.xp-fill {
-    height: 100%;
-    background: var(--xp-fill);
-    border-radius: 6px;
-    width: 0;
-    transition: width 1s ease-out;
-    position: relative;
-    z-index: 1;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
 /* Seção de Informações */
 .player-info-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
     margin-bottom: 20px;
 }
 
@@ -236,6 +144,7 @@ body {
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
 }
 
 .info-card h3 {
@@ -246,36 +155,6 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.health-metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.metric {
-    background-color: rgba(58, 91, 255, 0.1);
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-}
-
-.metric-value {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--secondary-color);
-    display: block;
-}
-
-.metric-label {
-    font-size: 0.8rem;
-    color: var(--text-gray);
-    display: block;
-}
-
-.bio-card {
-    grid-column: span 2;
 }
 
 .bio-card p {
@@ -392,15 +271,6 @@ body {
     font-size: 1.2rem;
 }
 
-.health-btn {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: #4CAF50;
-}
-
-.health-btn:hover {
-    background-color: rgba(76, 175, 80, 0.3);
-}
-
 /* Modais */
 .modal {
     display: none;
@@ -485,116 +355,269 @@ input:focus, textarea:focus {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Avatar Modal */
-.avatar-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.avatar-option {
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 2px solid transparent;
-}
-
-.avatar-option:hover {
-    transform: scale(1.05);
-}
-
-.avatar-option.selected {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 15px var(--secondary-color);
-}
-
-.avatar-option img {
+/* Modal de Foto - Estilos Completos */
+.photo-modal-content {
     width: 100%;
-    height: auto;
-    display: block;
-    aspect-ratio: 1/1;
+    max-width: 420px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    margin: 10px auto;
+    width: 80%;
+}
+
+.upload-container {
+    padding: 0 25px 25px;
 }
 
 .upload-area {
-    border: 2px dashed var(--primary-color);
-    border-radius: 8px;
-    padding: 20px;
     text-align: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
+    padding: 20px;
+    border: 2px dashed var(--primary-color);
+    border-radius: 10px;
+    background: rgba(58, 91, 255, 0.05);
+    transition: all 0.3s ease;
 }
 
 .upload-area:hover {
-    background-color: rgba(58, 91, 255, 0.1);
+    background: rgba(58, 91, 255, 0.1);
+    transform: translateY(-2px);
 }
 
-.upload-area i {
-    font-size: 2rem;
+.upload-icon {
+    font-size: 2.5rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-.upload-area p {
-    margin: 0;
+.upload-text {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.file-requirements {
+    font-size: 0.85rem;
     color: var(--text-gray);
+    margin-bottom: 20px;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.file-input-label:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(58, 91, 255, 0.3);
+}
+
+.file-input-label input[type="file"] {
+    display: none;
+}
+
+.file-name-display {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    font-style: italic;
+    min-height: 20px;
 }
 
 .image-preview {
-    margin: 15px 0;
-    display: none;
+    margin-top: 25px;
     text-align: center;
+    display: none;
+    animation: fadeIn 0.4s ease;
 }
 
-.image-preview img {
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: 8px;
-}
-
-/* Health Tips Modal */
-.health-tips {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-}
-
-.health-tip {
+.preview-header {
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    padding: 15px;
-    background-color: rgba(76, 175, 80, 0.1);
-    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
 }
 
-.health-tip i {
-    font-size: 1.5rem;
-    color: #4CAF50;
-    margin-top: 3px;
+.preview-icon {
+    font-size: 1.2rem;
 }
 
-.health-tip p {
-    margin: 0;
+.preview-image-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    padding: 0; /* Removido o padding */
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0; /* Removido o border-radius aqui */
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--card-border);
+}
+
+.cancel-btn, .confirm-btn {
     flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    max-width: 48%;
+}
+
+.cancel-btn {
+    background: var(--card-bg);
+    color: var(--text-light);
+    border: 1px solid var(--card-border);
+    margin-right: 10px;
+}
+
+.cancel-btn:hover {
+    background: #2a2a2a;
+}
+
+.confirm-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.confirm-btn:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(58, 91, 255, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.photo-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.photo-modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border: 1px solid var(--card-border);
+}
+
+.cancel-btn:hover {
+    background-color: #2a2a2a;
+    transform: translateY(-2px);
+}
+
+.confirm-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.confirm-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(58, 91, 255, 0.3);
+}
+
+/* Estilo personalizado para o input de arquivo */
+.custom-file-input {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.custom-file-input:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.custom-file-input input[type="file"] {
+    display: none; /* Esconde o input padrão */
+}
+
+/* Estilo para o texto do arquivo selecionado */
+.file-name {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    font-style: italic;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-    .player-info-section {
-        grid-template-columns: 1fr;
-    }
-    
-    .bio-card {
-        grid-column: span 1;
-    }
-    
-    .health-metrics {
-        grid-template-columns: 1fr;
-    }
-    
     .avatar-options {
         grid-template-columns: repeat(2, 1fr);
     }

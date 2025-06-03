@@ -1,17 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Elementos principais
-    const backButton = document.getElementById('back-button');
     const changePhotoBtn = document.getElementById('change-photo-btn');
     const editUsernameBtn = document.querySelector('.edit-username');
     const editBioBtn = document.querySelector('.edit-bio');
-    const healthBtn = document.getElementById('health-btn');
     
     // Modais
     const modals = {
         username: document.getElementById('username-modal'),
         bio: document.getElementById('bio-modal'),
-        photo: document.getElementById('photo-modal'),
-        health: document.getElementById('health-modal')
+        photo: document.getElementById('photo-modal')
     };
     
     // Elementos de formulário
@@ -31,17 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelButtons = {
         username: document.getElementById('cancel-username'),
         bio: document.getElementById('cancel-bio'),
-        photo: document.getElementById('cancel-photo'),
-        health: document.getElementById('close-health')
+        photo: document.getElementById('cancel-photo')
     };
     
     // Avatar options
     const avatarOptions = document.querySelectorAll('.avatar-option');
-    
-    // Event Listeners
-    backButton.addEventListener('click', () => {
-        window.history.back();
-    });
     
     // Abrir modais
     changePhotoBtn.addEventListener('click', () => {
@@ -56,10 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
     editBioBtn.addEventListener('click', () => {
         bioInput.value = document.getElementById('bio-text').textContent.trim();
         modals.bio.style.display = 'flex';
-    });
-    
-    healthBtn.addEventListener('click', () => {
-        modals.health.style.display = 'flex';
     });
     
     // Selecionar avatar
@@ -84,7 +71,62 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     });
+
+   // Configuração do Modal de Foto
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const previewImg = document.getElementById('preview-img');
+    const previewDiv = document.getElementById('image-preview');
     
+    if (file) {
+        // Mostra o nome do arquivo (truncado se necessário)
+        fileNameDisplay.textContent = file.name.length > 25 ? 
+            file.name.substring(0, 22) + '...' : file.name;
+        
+        // Pré-visualização da imagem
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    
+                    previewImg.onload = function() {
+                        imagePreview.style.display = 'block';
+                        
+                        // Ajustar imagem para preencher o círculo
+                        const containerRatio = 1; // Container quadrado
+                        const imgRatio = this.naturalWidth / this.naturalHeight;
+                        
+                        if (imgRatio > containerRatio) {
+                            this.style.width = 'auto';
+                            this.style.height = '100%';
+                        } else {
+                            this.style.width = '100%';
+                            this.style.height = 'auto';
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+// Fechar modal ao clicar no botão Cancelar
+document.getElementById('cancel-photo').addEventListener('click', function() {
+    document.getElementById('photo-modal').style.display = 'none';
+    document.getElementById('file-input').value = '';
+    document.getElementById('image-preview').style.display = 'none';
+    document.getElementById('file-name-display').textContent = '';
+});
+
+// Fechar modal ao clicar fora
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('photo-modal')) {
+        document.getElementById('photo-modal').style.display = 'none';
+        document.getElementById('file-input').value = '';
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('file-name-display').textContent = '';
+    }
+});
+
     // Salvar alterações
     saveUsernameBtn.addEventListener('click', function() {
         const usernameElement = document.getElementById('username');
@@ -181,14 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Animar progresso
-    setTimeout(() => {
-        const xpFill = document.getElementById('xp-fill');
-        if (xpFill) {
-            xpFill.style.width = '65%';
-        }
-    }, 500);
-    
     // Animar conquistas
     const achievements = document.querySelectorAll('.achievement');
     achievements.forEach((achievement, index) => {
@@ -197,15 +231,4 @@ document.addEventListener('DOMContentLoaded', function() {
             achievement.style.transform = 'translateY(0)';
         }, index * 150);
     });
-    
-    // Efeito de brilho na barra de XP
-    setInterval(() => {
-        const xpBar = document.querySelector('.xp-bar');
-        if (xpBar) {
-            xpBar.style.boxShadow = '0 0 15px rgba(58, 91, 255, 0.7)';
-            setTimeout(() => {
-                xpBar.style.boxShadow = 'none';
-            }, 1000);
-        }
-    }, 3000);
 });
