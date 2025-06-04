@@ -30,11 +30,11 @@ if ($result && mysqli_num_rows($result) > 0) {
   <title>Configurações - Doce Vida</title>
 
   <!-- CSS e Tailwind -->
-  <link rel="stylesheet" href="public/css/style.css" />
-  <link rel="stylesheet" href="public/css/settings.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <link rel="stylesheet" href="/public/css/settings.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="public/script.js" defer></script>
+  <script src="/public/script.js" defer></script>
 </head>
 
 <body>

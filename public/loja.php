@@ -5,19 +5,17 @@ require './partials/header.php';
 require './partials/menu.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loja - Doce Vida</title>
-  <link rel="stylesheet" href="public/css/style.css" />
-  <link rel="stylesheet" href="public/css/loja.css" />
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <link rel="stylesheet" href="/public/css/loja.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="public/script.js" defer></script>
-  <script src="public/loja.js" defer></script>
+  <script src="/public/script.js" defer></script>
+  <script src="/public/loja.js" defer></script>
 </head>
 
 <body>
