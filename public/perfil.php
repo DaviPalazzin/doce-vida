@@ -1,6 +1,6 @@
 <?php
 $pageTitle = "Perfil - javvzzy";
-$mostrarVoltar = false;
+$mostrarVoltar = true;
 require './partials/header.php';
 require './partials/menu.php';
 ?>
