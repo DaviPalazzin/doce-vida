@@ -4,3 +4,18 @@ div {
     text-align: center;
     opacity: 50%;
 }
+
+/* Adicione estas regras ao seu arquivo CSS existente */
+
+.settings-tabs {
+  display: flex;
+  justify-content: center; /* Centraliza as abas horizontalmente */
+  border-bottom: 1px solid var(--light-border);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
+}
+
+/* Mantenha todas as outras regras CSS existentes */

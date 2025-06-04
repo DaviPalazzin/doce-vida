@@ -3,5 +3,8 @@
         "psr-4": {
             "Application\\" : "src/"
         }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
     }
 }

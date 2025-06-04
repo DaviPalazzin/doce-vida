@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete a Frase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="titulo">🧠 Complete a Frase</h1>
+    <div id="score">Pontuação: 0</div>
+    <div id="timer">⏳ Tempo: 30</div>
+    <div id="phrase" class="frase"></div>
+    <input type="text" id="userInput" placeholder="Digite a palavra que falta..." autocomplete="off">
+    <button onclick="checkAnswer()">Responder</button>
+    <button id="homeButton" class="home-button">Voltar para tela inicial</button> <!-- Novo botão -->
+    <div id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,51 +1,136 @@
 <?php
-session_start();
-
-// Verifica se o usuário está logado
-if (!isset($_SESSION['username'])) {
-    // Se não estiver logado, redireciona para a página de login
-    header("Location: index.php");
-    exit();
-}
-
+$pageTitle = "Perfil - javvzzy";
+$mostrarVoltar = true;
+require './partials/header.php';
+require './partials/menu.php';
 ?>
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil</title>
-    <link rel="stylesheet" href="css/perfil.css">
-</head>
-<body>
-
-<div class="container">
-    <h2>Editar Perfil</h2>
-    
-    <!-- Exibir Foto de Perfil -->
-    <div class="profile-pic">
-        <img src="<?= $usuario['foto_perfil'] ?>" alt="Foto de Perfil">
+<link rel="stylesheet" href="css/perfil.css">
+<div class="fullscreen-profile">
+    <div class="profile-header-container">
+        <h1 class="profile-title">MEU PERFIL</h1>
     </div>
 
-    <form method="POST" enctype="multipart/form-data">
-        <label>Nome:</label>
-        <input type="text" name="nome" value="<?= $usuario['nome'] ?>" required>
+    <div class="profile-content">
+        <!-- Seção do Avatar -->
+        <div class="avatar-section">
+            <div class="profile-picture-container">
+                <img src="https://i.imgur.com/JqYeS5n.jpg" alt="Avatar" class="profile-picture" id="profile-picture">
+                <button class="change-photo-btn" id="change-photo-btn">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+            <div class="profile-identity">
+                <h2 id="username">javvzzy <i class="fas fa-pencil-alt edit-username"></i></h2>
+            </div>
+        </div>
 
-        <label>E-mail:</label>
-        <input type="email" name="email" value="<?= $usuario['email'] ?>" required>
+        <!-- Seção de Informações -->
+        <div class="player-info-section">
+            <div class="info-card bio-card">
+                <h3><i class="fas fa-book-open"></i> BIO</h3>
+                <p id="bio-text">Oi! Estou aprendendo sobre prevenção da diabetes! <i class="fas fa-pencil-alt edit-bio"></i></p>
+            </div>
+        </div>
 
-        <label>Nova Senha (opcional):</label>
-        <input type="password" name="senha">
+        <!-- Seção de Conquistas -->
+        <div class="achievements-section">
+            <h3><i class="fas fa-trophy"></i> CONQUISTAS</h3>
+            <div class="achievements-grid">
+                <div class="achievement unlocked">
+                    <div class="achievement-icon" style="background-color: #4CAF50;">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h4>Alimentação Saudável</h4>
+                        <p>Completou 10 lições sobre nutrição</p>
+                    </div>
+                </div>
+                <div class="achievement unlocked">
+                    <div class="achievement-icon" style="background-color: #2196F3;">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h4>Ativo</h4>
+                        <p>30 dias de exercícios registrados</p>
+                    </div>
+                </div>
+                <div class="achievement locked">
+                    <div class="achievement-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h4>Pesquisador</h4>
+                        <p>Desbloqueie completando 50 lições</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <label>Alterar Foto de Perfil:</label>
-        <input type="file" name="foto_perfil">
-
-        <button type="submit">Salvar Alterações</button>
-        
-        <a href="home.php" class="voltar"><button class="Voltar">Voltar</button></a>
-    </form>
+        <!-- Menu de Ações -->
+        <div class="actions-menu">
+            <button class="action-btn">
+                <i class="fas fa-gamepad"></i> Meus Jogos
+            </button>
+            <button class="action-btn">
+                <i class="fas fa-cog"></i> Configurações
+            </button>
+        </div>
+    </div>
 </div>
 
-</body>
-</html>
+<!-- Modais -->
+<div class="modal" id="username-modal">
+    <div class="modal-content">
+        <h3>EDITAR NICKNAME</h3>
+        <input type="text" id="username-edit-input" maxlength="20" value="javvzzy">
+        <div class="modal-buttons">
+            <button id="cancel-username">Cancelar</button>
+            <button id="save-username">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="bio-modal">
+    <div class="modal-content">
+        <h3>EDITAR BIO</h3>
+        <textarea id="bio-edit-input" maxlength="100">Oi! Estou aprendendo sobre prevenção da diabetes!</textarea>
+        <div class="modal-buttons">
+            <button id="cancel-bio">Cancelar</button>
+            <button id="save-bio">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="photo-modal">
+  <div class="modal-compact-content">
+    <h3>ALTERAR FOTO</h3>
+    
+    <div class="compact-upload-area" id="upload-area">
+      <div class="upload-icon-sm">
+        <i class="fas fa-camera"></i>
+      </div>
+      <label class="compact-file-input">
+        <input type="file" id="file-input" accept="image/*">
+        <span>Selecionar Imagem</span>
+      </label>
+      <p class="file-info-sm">JPG ou PNG (até 5MB)</p>
+    </div>
+    
+    <div class="compact-preview" id="image-preview" style="display:none">
+      <div class="preview-circle-sm">
+        <img id="preview-img" src="#" alt="Pré-visualização">
+      </div>
+    </div>
+    
+    <div class="compact-modal-footer">
+      <button class="btn-sm cancel" id="cancel-photo">Cancelar</button>
+      <button class="btn-sm confirm" id="save-photo">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="./perfil.js"></script>
+
+<?php
+require './partials/footer.php';
+?>

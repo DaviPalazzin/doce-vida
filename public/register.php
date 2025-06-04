@@ -1,129 +1,140 @@
 <?php
-include('conexao.php');
+use PHPMailer\PHPMailer\PHPMailer;
+require __DIR__ . '/../vendor/autoload.php';
+
+$erro = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $senha = $_POST['senha'];
+    include('conexao.php');
 
-    // Verifica se o usuário já existe
-    $check_user = "SELECT * FROM usuarios WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $check_user);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $senha = $_POST['senha'];
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+    // Verificar se o e-mail já está cadastrado
+    $query = "SELECT * FROM usuarios WHERE email = '$email'";
+    $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) > 0) {
-        echo json_encode(['error' => 'Nome de usuário já existe.']);
+        $erro = "E-mail já cadastrado!";
     } else {
-        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        $query = "INSERT INTO usuarios (username, senha) VALUES (?, ?)";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "ss", $username, $senha_hash);
+        // Gerar código de verificação (numérico de 6 dígitos)
+        $codigo = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        if (mysqli_stmt_execute($stmt)) {
-            echo json_encode(['success' => 'Cadastro realizado com sucesso!']);
+        // Inserir usuário com e-mail não verificado
+        $query = "INSERT INTO usuarios (email, username, senha, email_verificado, codigo_verificacao) VALUES ('$email', '$username', '$senha_hash', 0, '$codigo')";
+        if (mysqli_query($conn, $query)) {
+
+            // Enviar o e-mail com o código
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'suporteprojetodocevida@gmail.com';
+                $mail->Password = 'bxabihpegwyxxpxi'; // Use senha de app aqui
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                $mail->setFrom('suporteprojetodocevida@gmail.com', 'Doce Vida');
+                $mail->addAddress($email);
+                $mail->isHTML(true);
+
+                  // 🔧 Define o charset correto
+        $mail->CharSet = 'UTF-8';
+
+                $mail->Subject = 'Confirmação de Cadastro - Doce Vida';
+                $mail->Body = "
+        <div style='max-width: 600px; margin: auto; font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px; border-radius: 10px;'>
+          <div style='text-align: center;'>
+            <h1 style='color: #2563EB; font-size: 28px;'>✅ Verificação de Conta</h1>
+            <p style='font-size: 16px;'>Obrigado por criar uma conta no <strong>Doce Vida</strong>!</p>
+          </div>
+          <div style='background-color: white; padding: 30px; margin: 20px 0; border-radius: 8px; text-align: center; box-shadow: 0 0 10px rgba(0,0,0,0.05);'>
+            <p style='font-size: 16px; margin-bottom: 10px;'>Use o código abaixo para verificar sua conta:</p>
+            <div style='font-size: 24px; color: #2563EB; font-weight: bold; letter-spacing: 2px; margin: 20px 0;'>$codigo</div>
+            <p style='font-size: 14px; color: #888;'>Este código expira em <strong>15 minutos</strong>.</p>
+          </div>
+          <div style='background-color: #fff8e1; padding: 15px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ffc107;'>
+            <p style='font-size: 14px; color: #666; margin: 0;'>
+              <strong>Importante:</strong> Se você não solicitou a criação desta conta, por favor entre em contato imediatamente com nosso <a href='mailto:suporteprojetodocevida@gmail.com' style='color: #2563EB;'>suporte</a> ou ignore este e-mail.
+            </p>
+          </div>
+          <hr style='border: none; border-top: 1px solid #ddd; margin: 30px 0;'>
+          <div style='text-align: center; font-size: 12px; color: #aaa;'>
+            &copy; " . date('Y') . " Doce Vida • Todos os direitos reservados.
+          </div>
+        </div>
+        ";
+
+                $mail->send();
+
+                header("Location: verificar_codigo.php?email=" . urlencode($email));
+                exit();
+
+            } catch (Exception $e) {
+                $erro = "Erro ao enviar e-mail: " . $mail->ErrorInfo;
+            }
+
         } else {
-            echo json_encode(['error' => 'Erro ao cadastrar!']);
+            $erro = "Erro ao cadastrar usuário!";
         }
     }
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Doce Vida - Cadastro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Doce Vida - Cadastro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-200 h-screen flex items-center justify-center">
+  <div class="flex w-full max-w-4xl">
 
-<div class="flex w-full max-w-4xl">
-    <!-- Left Section -->
+    <!-- LADO ESQUERDO - Formulário -->
     <div class="w-1/2 flex flex-col items-center justify-center">
-        <div class="text-center">
-            <div class="flex items-center justify-center mb-4">
-                <img src="img/fita doce vida.png" alt="Blue ribbon logo for diabetes awareness" class="h-16 w-30">
-            </div>
-            <h1 class="text-3xl font-bold text-blue-900">Doce Vida</h1>
-            <p class="text-blue-900 text-sm mt-2">Sua jornada na prevenção à diabetes</p>
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <img alt="Blue ribbon logo for diabetes awareness" class="h-16 w-30" src="img/fita doce vida.png">
         </div>
+        <h1 class="text-3xl font-bold text-blue-900">Doce Vida - Cadastro</h1>
+        <p class="text-blue-900 text-sm mt-2">Crie sua conta para iniciar sua jornada</p>
+      </div>
 
-        <form id="registerForm" class="mt-8 w-3/4" method="POST">
-            <input class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none"
-                   type="text" name="username" id="username" placeholder="Nome" required>
-            <div id="usernameError" class="text-red-600 text-sm mb-2"></div>
+      <form method="POST" action="register.php" class="mt-8 w-3/4">
+        <input name="email" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" type="email" placeholder="E-mail" required>
+       <input name="username" class="w-full px-4 py-2 mb-2 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Nome completo" type="text" required>
+<p class="text-xs text-blue-800 mb-4 text-center">⚠️ O nome completo não poderá ser alterado depois do cadastro.</p>
 
-            <input class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none"
-                   type="password" name="senha" placeholder="Senha" required>
+        <input name="senha" class="w-full px-4 py-2 mb-4 border border-blue-900 rounded-full text-blue-900 focus:outline-none" placeholder="Senha" type="password" required>
 
-            <div id="registerMessage" class="text-center text-sm font-semibold mb-4"></div>
+        <?php if (!empty($erro)): ?>
+          <p class="text-red-600 text-sm mb-4 text-center"><?= $erro ?></p>
+        <?php endif; ?>
 
-            <button type="submit"
-                    class="w-full bg-blue-400 text-white py-2 rounded-full hover:bg-blue-500 transition">
-                CADASTRAR
-            </button>
+        <button type="submit" class="w-full bg-blue-400 text-white py-2 rounded-full hover:bg-blue-500">CADASTRAR</button>
 
-            <a href="index.php" class="text-blue-900 text-sm underline block text-center mt-4">
-                Já tem conta? Faça o login
-            </a>
-        </form>
+        <a href="index.php" class="text-blue-900 text-sm underline block text-center mt-4">Já tem conta? Faça login</a>
+      </form>
+
     </div>
 
-    <!-- Right Section -->
+    <!-- LADO DIREITO - Ilustração -->
     <div class="w-1/2 flex items-center justify-center">
-        <div class="relative">
-            <div class="bg-blue-300 rounded-full h-64 w-64 flex items-center justify-center">
-                <div class="bg-blue-400 rounded-full h-48 w-48 flex items-center justify-center">
-                    <img src="img/login doce vida.png" alt="Imagem de login" class="h-128 w-64">
-                </div>
-            </div>
+      <div class="relative">
+        <div class="bg-blue-300 rounded-full h-64 w-64 flex items-center justify-center">
+          <div class="bg-blue-400 rounded-full h-48 w-48 flex items-center justify-center">
+            <img alt="Hand holding a glucometer icon" class="h-128 w-64" src="img/login doce vida.png">
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Verifica se o nome de usuário já existe ao sair do campo
-        $('#username').on('blur', function () {
-            const username = $(this).val();
-            if (username) {
-                $.get('register.php', {check_username: username}, function (data) {
-                    const response = JSON.parse(data);
-                    if (response.exists) {
-                        $('#usernameError').text('Nome de usuário já existe.');
-                    } else {
-                        $('#usernameError').text('');
-                    }
-                });
-            }
-        });
-
-        // Envia o formulário via AJAX
-        $('#registerForm').submit(function (e) {
-            e.preventDefault();
-
-            const formData = $(this).serialize();
-            $.post('register.php', formData, function (data) {
-                const response = JSON.parse(data);
-                const messageDiv = $('#registerMessage');
-
-                if (response.error) {
-                    messageDiv.text(response.error).removeClass('text-green-600').addClass('text-red-600');
-                } else if (response.success) {
-                    messageDiv.text(response.success).removeClass('text-red-600').addClass('text-green-600');
-                    $('#registerForm')[0].reset(); // limpa os campos
-                }
-            });
-        });
-    });
-</script>
+  </div>
 </body>
 </html>
