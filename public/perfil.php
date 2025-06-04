@@ -102,46 +102,31 @@ require './partials/menu.php';
 </div>
 
 <div class="modal" id="photo-modal">
-    <div class="modal-content photo-modal-content">
-        <div class="modal-header">
-            <h3>ALTERAR AVATAR</h3>
-            <div class="header-divider"></div>
-        </div>
-
-        <div class="image-preview" id="image-preview" style="display: none;">
-            <div class="preview-header">
-                <i class="fas fa-check-circle preview-icon"></i>
-                <span>PRÉ-VISUALIZAÇÃO</span>
-            </div>
-            <div class="preview-image-container">
-                <img id="preview-img" src="#" alt="Pré-visualização">
-            </div>
-        </div>
-        
-        <div class="upload-container">
-            <div class="upload-area" id="upload-area">
-                <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <p class="upload-text">Clique para selecionar ou arraste uma imagem</p>
-                <p class="file-requirements">Formatos suportados: JPG, PNG (Máx. 5MB)</p>
-                
-                <label class="file-input-label">
-                    Selecionar Arquivo
-                    <input type="file" id="file-input" accept="image/*">
-                </label>
-                
-                <div class="file-name-display" id="file-name-display"></div>
-            </div>
-            
-            
-        </div>
-        
-        <div class="modal-footer">
-            <button class="cancel-btn" id="cancel-photo">Cancelar</button>
-            <button class="confirm-btn" id="save-photo">Aplicar Alteração</button>
-        </div>
+  <div class="modal-compact-content">
+    <h3>ALTERAR FOTO</h3>
+    
+    <div class="compact-upload-area" id="upload-area">
+      <div class="upload-icon-sm">
+        <i class="fas fa-camera"></i>
+      </div>
+      <label class="compact-file-input">
+        <input type="file" id="file-input" accept="image/*">
+        <span>Selecionar Imagem</span>
+      </label>
+      <p class="file-info-sm">JPG ou PNG (até 5MB)</p>
     </div>
+    
+    <div class="compact-preview" id="image-preview" style="display:none">
+      <div class="preview-circle-sm">
+        <img id="preview-img" src="#" alt="Pré-visualização">
+      </div>
+    </div>
+    
+    <div class="compact-modal-footer">
+      <button class="btn-sm cancel" id="cancel-photo">Cancelar</button>
+      <button class="btn-sm confirm" id="save-photo">Salvar</button>
+    </div>
+  </div>
 </div>
 
 <script src="./perfil.js"></script>
