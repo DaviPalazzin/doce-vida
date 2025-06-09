@@ -511,4 +511,169 @@ body.dark-mode .danger-description {
   scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
 }
 
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Card */
+.modal-card {
+  background-color: var(--light-card);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  color: var(--light-text);
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .modal-card {
+  background-color: var(--dark-card);
+  color: var(--dark-text);
+}
+
+/* Botões */
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+
+.confirm-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: darkred;
+}
+
+.cancel-btn {
+  background-color: #718096;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #4a5568;
+}
+
+/* Danger Button */
+.danger-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.danger-btn:hover {
+  background-color: darkred;
+}
+
+/* Estilos para a zona perigosa */
+.danger-zone {
+  border-left: 4px solid #e53e3e;
+  background-color: rgba(229, 62, 62, 0.05);
+}
+
+.danger-title {
+  color: #e53e3e;
+}
+
+.danger-btn {
+  background-color: #e53e3e;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.danger-btn:hover {
+  background-color: #c53030;
+  transform: translateY(-1px);
+}
+
+/* Estilos para o input do código */
+#deleteToken {
+  letter-spacing: 0.5rem;
+  font-family: monospace;
+}
+
+/* Animações para o modal */
+.modal {
+  transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-container {
+  transition: all 0.3s ease;
+}
+
+.modal.hidden .modal-container {
+  transform: translateY(-20px);
+}
+
+/* Modal de exclusão */
+.modal {
+  transition: opacity 0.3s ease;
+}
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.modal-container {
+  transition: all 0.3s ease;
+}
+.modal.hidden .modal-container {
+  transform: translateY(-20px);
+}
+
+/* Input do código */
+#deleteToken {
+  letter-spacing: 0.5em;
+  font-family: monospace;
+  font-size: 1.25rem;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+/* Botão de reenviar */
+#resendCode {
+  transition: color 0.2s;
+}
+#resendCode:hover {
+  text-decoration: underline;
+}
 /* Mantenha todas as outras regras CSS existentes */
