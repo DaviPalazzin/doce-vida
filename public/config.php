@@ -353,7 +353,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         <div id="deleteStep1">
           <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Para iniciar o processo, clique no botão abaixo para receber um código de confirmação por e-mail.</p>
           
-          <form method="POST" action="enviar_delete.php" class="mt-4">
+<form method="POST" action="enviar_delete.php" class="mt-4" id="deleteTokenRequestForm">
+
             <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
             <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 flex items-center justify-center">
               <i class="fas fa-paper-plane mr-2"></i> Enviar Código de Confirmação
@@ -528,26 +529,48 @@ document.addEventListener('keydown', (e) => {
       document.getElementById(`${tabName}-tab`).classList.add('active');
     }
 
-    // Modo escuro
-    const darkModeToggle = document.getElementById('darkModeToggle');
+    // Modo escuro - Versão melhorada
+const darkModeToggle = document.getElementById('darkModeToggle');
 
-    // Verifica preferência salva ou do sistema
-    if (localStorage.getItem('darkMode') === 'enabled' ||
-      (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.body.classList.add('dark-mode');
-      darkModeToggle.checked = true;
-    }
-
-    darkModeToggle.addEventListener('change', function() {
-      if (this.checked) {
+// Função para aplicar/remover o tema escuro
+function applyDarkMode(isDark) {
+    if (isDark) {
         document.body.classList.add('dark-mode');
-        localStorage.setItem('darkMode', 'enabled');
-      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
         document.body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', 'disabled');
-      }
-    });
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+}
 
+// Verifica preferência salva ou do sistema
+const savedTheme = localStorage.getItem('theme');
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    applyDarkMode(true);
+    darkModeToggle.checked = true;
+} else {
+    applyDarkMode(false);
+    darkModeToggle.checked = false;
+}
+
+// Event listener para o toggle
+darkModeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        localStorage.setItem('theme', 'dark');
+        applyDarkMode(true);
+    } else {
+        localStorage.setItem('theme', 'light');
+        applyDarkMode(false);
+    }
+    
+    // Dispara evento personalizado para outras páginas
+    const themeEvent = new CustomEvent('themeChanged', {
+        detail: { theme: this.checked ? 'dark' : 'light' }
+    });
+    window.dispatchEvent(themeEvent);
+});
     // Controle do modo para daltônicos
     document.querySelectorAll('input[name="daltonismo"]').forEach(radio => {
       radio.addEventListener('change', function() {
@@ -644,6 +667,38 @@ document.addEventListener('keydown', (e) => {
         iniciarCooldownReenvio();
       }
     });
+
+    // Interceptar envio do formulário de solicitação do código
+const deleteTokenRequestForm = document.getElementById('deleteTokenRequestForm');
+deleteTokenRequestForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(deleteTokenRequestForm);
+
+  try {
+    const response = await fetch('enviar_delete.php', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok) {
+      // Mostrar a etapa 2 do modal
+      deleteStep1.classList.add('hidden');
+      deleteStep2.classList.remove('hidden');
+      deleteTokenInput.focus();
+    } else {
+      const errorText = await response.text();
+      if (errorText === 'email_not_found') {
+        alert('E-mail não encontrado.');
+      } else {
+        alert('Erro ao enviar o e-mail. Tente novamente.');
+      }
+    }
+  } catch (error) {
+    alert('Erro de conexão. Tente novamente.');
+  }
+});
+
   </script>
 </body>
 

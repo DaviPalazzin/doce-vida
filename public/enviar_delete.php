@@ -9,27 +9,24 @@ include('conexao.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
-    // Verificar se o e-mail existe
     $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows == 0) {
-        header("Location: config.php?tab=seguranca&delete_error=email_not_found");
+        http_response_code(400);
+        echo 'email_not_found';
         exit();
     }
 
-    // Gerar token
     $token = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
     $expira = date("Y-m-d H:i:s", strtotime("+15 minutes"));
 
-    // Salvar token no banco
     $stmt = $conn->prepare("UPDATE usuarios SET delete_token=?, delete_token_expira=? WHERE email=?");
     $stmt->bind_param("sss", $token, $expira, $email);
     $stmt->execute();
 
-    // Enviar e-mail
     $mail = new PHPMailer(true);
 
     try {
@@ -41,11 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
-    
+
         $mail->setFrom('suporteprojetodocevida@gmail.com', 'Doce Vida');
         $mail->addAddress($email);
-    
-        $mail->isHTML(true);
+
+ $mail->isHTML(true);
         $mail->Subject = 'Confirmação de Exclusão de Conta - Doce Vida';
 $mail->Body = "
 <div style='max-width: 600px; margin: auto; font-family: Arial, sans-serif; color: #333; background-color: #fef2f2; padding: 20px; border-radius: 10px;'>
@@ -67,12 +64,12 @@ $mail->Body = "
 </div>
 ";
 
-      
         $mail->send();
-        header("Location: config.php?tab=seguranca&delete_sent=1");
+
+        echo 'ok';
     } catch (Exception $e) {
-        header("Location: config.php?tab=seguranca&delete_error=email_failed");
+        http_response_code(500);
+        echo 'email_failed';
     }
-    exit();
 }
 ?>
