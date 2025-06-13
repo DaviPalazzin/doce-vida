@@ -165,21 +165,25 @@ window.addEventListener('click', function(event) {
     });
     
     savePhotoBtn.addEventListener('click', function() {
-        // Verifica se tem uma imagem enviada
         if (previewImg.src && previewImg.src !== '#') {
-            profilePicture.src = previewImg.src;
-        } 
-        // Se não, verifica se tem um avatar selecionado
-        else {
-            const selectedAvatar = document.querySelector('.avatar-option.selected img');
-            if (selectedAvatar) {
-                profilePicture.src = selectedAvatar.src;
-            }
+            // Envia a foto para o servidor via AJAX (exemplo com Fetch API)
+            const formData = new FormData();
+            formData.append('foto_perfil', fileInput.files[0]);
+
+            fetch('perfil.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Atualiza a imagem no perfil e no cabeçalho
+                profilePicture.src = previewImg.src;
+                if (window.top.document.getElementById('header-avatar')) {
+                    window.top.document.getElementById('header-avatar').src = previewImg.src;
+                }
+                modals.photo.style.display = 'none';
+            });
         }
-        
-        modals.photo.style.display = 'none';
-        fileInput.value = '';
-        imagePreview.style.display = 'none';
     });
     
     // Fechar modais

@@ -6,6 +6,8 @@ if (!isset($_SESSION['email'])) {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -114,8 +116,13 @@ if (!isset($_SESSION['email'])) {
       cursor: pointer;
     }
 
-    .user-avatar- {
-      border-radius: 9999px;
+    .user-avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4fa3f7;
+        box-shadow: 0 0 10px rgba(79, 163, 247, 0.5);
     }
   </style>
 
@@ -176,7 +183,19 @@ if (!isset($_SESSION['email'])) {
     </nav>
 
     <div class="profile-btn" onclick="toggleMenu()">
-      <img class="user-avatar-" src="img/perfil.jpg" alt="Foto de perfil" width="40px" />
+      <?php
+        require 'conexao.php';
+
+        // Busca a foto mais recente do banco
+        if (isset($_SESSION['user_id'])) {
+          $stmt = $conn->prepare("SELECT foto_perfil FROM usuarios WHERE id = ?");
+          $stmt->bind_param("i", $_SESSION['user_id']);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $_SESSION['foto_perfil'] = $result->fetch_assoc()['foto_perfil'];
+        }
+      ?>
+      <img src="<?= $_SESSION['foto_perfil'] ?? 'img/perfil.jpg' ?>" id="header-avatar" class="user-avatar" onerror="this.src='/public/img/perfil.jpg'"> <!-- Fallback se a foto não existir -->
     </div>
   </header>
 

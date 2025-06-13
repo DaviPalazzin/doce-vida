@@ -14,7 +14,7 @@ require './partials/menu.php';
     </article>
     <article class="grid-item">
       <a href="jogos/quiz/quiz.html"><img class="grid-image" src="img/quiz.png" alt="Aprenda a comer" width="50%" /></a>
-      <p class="grid-title">Aprenda a comer</p>
+      <p class="grid-title">Quiz</p>
     </article>
     <article class="grid-item">
       <a href="jogos/complete as frases/complete-as-frases.html"><img class="grid-image" src="img/complete-as-frases.png" alt="Complete as frases" width="46%" /></a>

@@ -4,6 +4,55 @@ $mostrarVoltar = true;
 require './partials/header.php';
 require './partials/menu.php';
 ?>
+
+<?php
+require 'conexao.php'; // Arquivo com sua conexão PDO/MySQLi
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['foto_perfil'])) {
+    $pasta_upload = "uploads/perfil/";
+    $extensao = pathinfo($_FILES['foto_perfil']['name'], PATHINFO_EXTENSION);
+    $nome_arquivo = "user_" . $_SESSION['user_id'] . "_" . uniqid() . "." . $extensao;
+    $caminho_final = $pasta_upload . $nome_arquivo;
+
+    // Validações
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!in_array($_FILES['foto_perfil']['type'], $allowed_types)) {
+        die("Apenas imagens JPG, PNG ou GIF são permitidas!");
+    }
+
+    if ($_FILES['foto_perfil']['size'] > 5 * 1024 * 1024) {
+        die("O arquivo deve ter menos de 5MB!");
+    }
+
+    if (!file_exists($pasta_upload)) {
+        mkdir($pasta_upload, 0777, true);
+    }
+
+    if (move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $caminho_final)) {
+        // Atualiza no banco de dados
+        $stmt = $conn->prepare("UPDATE usuarios SET foto_perfil = ? WHERE id = ?");
+        $stmt->bind_param("si", $caminho_final, $_SESSION['user_id']);
+        $stmt->execute();
+        
+        // Atualiza na sessão
+        $_SESSION['foto_perfil'] = $caminho_final;
+
+        echo json_encode([
+            'success' => true,
+            'foto' => $caminho_final,
+            'message' => 'Foto atualizada com sucesso!'
+        ]);
+        exit;
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Erro ao salvar a foto.'
+        ]);
+        exit;
+    }
+}
+?>
+
 <link rel="stylesheet" href="css/perfil.css">
 <div class="fullscreen-profile">
     <div class="profile-header-container">
@@ -14,7 +63,7 @@ require './partials/menu.php';
         <!-- Seção do Avatar -->
         <div class="avatar-section">
             <div class="profile-picture-container">
-                <img src="https://i.imgur.com/JqYeS5n.jpg" alt="Avatar" class="profile-picture" id="profile-picture">
+                <img src="img/perfil.jpg" alt="Avatar" class="profile-picture" id="profile-picture">
                 <button class="change-photo-btn" id="change-photo-btn">
                     <i class="fas fa-camera"></i>
                 </button>
