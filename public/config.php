@@ -47,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
-<!-- ... (cabeçalho permanece o mesmo) ... -->
 
 <head>
   <meta charset="utf-8" />
@@ -76,10 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         <div class="settings-tab <?= $active_tab === 'jogos' ? 'active' : '' ?>" onclick="changeTab('jogos')">
           <i class="fas fa-gamepad"></i>
           Jogos
-        </div>
-        <div class="settings-tab <?= $active_tab === 'acessibilidade' ? 'active' : '' ?>" onclick="changeTab('acessibilidade')">
-          <i class="fas fa-universal-access"></i>
-          Acessibilidade
         </div>
         <div class="settings-tab <?= $active_tab === 'seguranca' ? 'active' : '' ?>" onclick="changeTab('seguranca')">
           <i class="fas fa-shield-alt"></i>
@@ -111,8 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
               </div>
             </div>
 
-            <!-- ... (restante do código permanece igual) ... -->
-
             <div class="form-group">
               <label class="form-label">Sexo</label>
               <select class="form-control">
@@ -131,8 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             </button>
           </div>
         </div>
-
-        <!-- Restante do código permanece igual -->
 
         <!-- ABA JOGOS -->
         <div id="jogos-tab" class="tab-content <?= $active_tab === 'jogos' ? 'active' : '' ?>">
@@ -157,80 +148,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
           </div>
         </div>
 
-        <!-- ABA ACESSIBILIDADE -->
-        <div id="acessibilidade-tab" class="tab-content <?= $active_tab === 'acessibilidade' ? 'active' : '' ?>">
-          <div class="settings-card">
-            <h2 class="settings-title">Tema</h2>
-
-            <div class="form-group">
-              <div class="toggle-group">
-                <label class="switch">
-                  <input type="checkbox" id="darkModeToggle">
-                  <span class="slider"></span>
-                </label>
-                <span>Modo escuro</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <h2 class="settings-title">Modo para Daltônicos</h2>
-
-            <div class="form-group">
-              <div class="color-option">
-                <input type="radio" id="daltonismo-none" name="daltonismo" value="none" checked>
-                <label for="daltonismo-none">Padrão (sem ajuste)</label>
-              </div>
-
-              <div class="color-option">
-                <input type="radio" id="daltonismo-protanopia" name="daltonismo" value="protanopia">
-                <div class="color-sample" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);"></div>
-                <label for="daltonismo-protanopia">Protanopia (vermelho/verde)</label>
-              </div>
-
-              <div class="color-option">
-                <input type="radio" id="daltonismo-deuteranopia" name="daltonismo" value="deuteranopia">
-                <div class="color-sample" style="background: linear-gradient(135deg, #FFD166, #06D6A0);"></div>
-                <label for="daltonismo-deuteranopia">Deuteranopia (verde/vermelho)</label>
-              </div>
-
-              <div class="color-option">
-                <input type="radio" id="daltonismo-tritanopia" name="daltonismo" value="tritanopia">
-                <div class="color-sample" style="background: linear-gradient(135deg, #A5B4FC, #F9A8D4);"></div>
-                <label for="daltonismo-tritanopia">Tritanopia (azul/amarelo)</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <h2 class="settings-title">Tamanho do Texto</h2>
-
-            <div class="form-group">
-              <select class="form-control">
-                <option>Pequeno</option>
-                <option selected>Médio</option>
-                <option>Grande</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-<!-- ABA SEGURANÇA -->
+        <!-- ABA SEGURANÇA -->
         <div id="seguranca-tab" class="tab-content <?= $active_tab === 'seguranca' ? 'active' : '' ?>">
           <div class="settings-card">
             <h2 class="settings-title">Alterar Senha</h2>
 
             <div class="reset-password-container">
-
               <!-- Parte 1: Enviar código -->
               <div id="enviarParte">
                 <h2 class="reset-title">Redefinir Senha</h2>
                 <p class="reset-subtitle">Clique no botão abaixo para ser direcionado à pagina de redefinição de senha.</p>
 
                 <div style="text-align: center;">
-  <a href="resetar_senha.php" class="reset-btn">Redefinir</a>
-</div>
-
+                  <a href="resetar_senha.php" class="reset-btn">Redefinir</a>
+                </div>
               </div>
             </div>
           </div>
@@ -295,167 +226,168 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
               <?php endif; ?>
             </div>
           </div>
+        </div>
+      </form>
+    </div>
+  </main>
 
-<!-- Modal de Exclusão de Conta -->
-<div id="deleteAccountModal" class="modal hidden fixed inset-0 z-50 overflow-y-auto">
-  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-  
-  <div class="modal-container relative w-full max-w-md mx-auto my-8 p-4">
-    <div class="modal-content bg-white rounded-lg shadow-xl overflow-hidden dark:bg-gray-800">
-      <!-- Cabeçalho -->
-      <div class="modal-header bg-red-600 p-4">
-        <h3 class="text-xl font-bold text-white">Confirmar Exclusão de Conta</h3>
-      </div>
-      
-      <!-- Corpo -->
-      <div class="modal-body p-6">
-        <div class="flex items-center mb-4">
-          <div class="flex-shrink-0 text-red-500">
-            <i class="fas fa-exclamation-triangle text-2xl"></i>
-          </div>
-          <div class="ml-3">
-            <p class="text-gray-700 dark:text-gray-300">Você está prestes a excluir permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita.</p>
-          </div>
+  <!-- Modal de Exclusão de Conta -->
+  <div id="deleteAccountModal" class="modal hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+    
+    <div class="modal-container relative w-full max-w-md mx-auto my-8 p-4">
+      <div class="modal-content bg-white rounded-lg shadow-xl overflow-hidden dark:bg-gray-800">
+        <!-- Cabeçalho -->
+        <div class="modal-header bg-red-600 p-4">
+          <h3 class="text-xl font-bold text-white">Confirmar Exclusão de Conta</h3>
         </div>
         
-        <?php if (isset($deleteError)): ?>
-          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            <?php echo $deleteError; ?>
-          </div>
-        <?php endif; ?>
-        
-        <div id="deleteStep1">
-          <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Para iniciar o processo, clique no botão abaixo para receber um código de confirmação por e-mail.</p>
-          
-<form method="POST" action="enviar_delete.php" class="mt-4" id="deleteTokenRequestForm">
-
-            <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
-            <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 flex items-center justify-center">
-              <i class="fas fa-paper-plane mr-2"></i> Enviar Código de Confirmação
-            </button>
-          </form>
-        </div>
-        
-        <div id="deleteStep2" class="hidden">
-          <form method="POST" action="processar_delete.php" class="mt-4">
-            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Insira o código de 6 dígitos que enviamos para <?= $_SESSION['email'] ?>:</p>
-            
-            <input type="text" name="delete_token" id="deleteToken" class="w-full px-3 py-2 border rounded-md text-center text-xl tracking-widest dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="______" maxlength="6" required>
-            <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
-            
-            <p id="tokenError" class="text-red-500 text-sm mt-2 hidden">Código inválido. Tente novamente.</p>
-            
-            <div class="flex justify-between items-center mt-4">
-              <button type="button" id="resendCode" class="text-sm text-blue-600 hover:text-blue-800">
-                <i class="fas fa-redo mr-1"></i> Reenviar código
-              </button>
-              
-              <div class="flex space-x-2">
-                <button type="button" id="cancelDelete" class="px-4 py-2 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
-                  Cancelar
-                </button>
-                <button type="submit" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled>
-                  Confirmar Exclusão
-                </button>
-              </div>
+        <!-- Corpo -->
+        <div class="modal-body p-6">
+          <div class="flex items-center mb-4">
+            <div class="flex-shrink-0 text-red-500">
+              <i class="fas fa-exclamation-triangle text-2xl"></i>
             </div>
-          </form>
+            <div class="ml-3">
+              <p class="text-gray-700 dark:text-gray-300">Você está prestes a excluir permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita.</p>
+            </div>
+          </div>
+          
+          <?php if (isset($deleteError)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              <?php echo $deleteError; ?>
+            </div>
+          <?php endif; ?>
+          
+          <div id="deleteStep1">
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Para iniciar o processo, clique no botão abaixo para receber um código de confirmação por e-mail.</p>
+            
+            <form method="POST" action="enviar_delete.php" class="mt-4" id="deleteTokenRequestForm">
+              <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
+              <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 flex items-center justify-center">
+                <i class="fas fa-paper-plane mr-2"></i> Enviar Código de Confirmação
+              </button>
+            </form>
+          </div>
+          
+          <div id="deleteStep2" class="hidden">
+            <form method="POST" action="processar_delete.php" class="mt-4">
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Insira o código de 6 dígitos que enviamos para <?= $_SESSION['email'] ?>:</p>
+              
+              <input type="text" name="delete_token" id="deleteToken" class="w-full px-3 py-2 border rounded-md text-center text-xl tracking-widest dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="______" maxlength="6" required>
+              <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
+              
+              <p id="tokenError" class="text-red-500 text-sm mt-2 hidden">Código inválido. Tente novamente.</p>
+              
+              <div class="flex justify-between items-center mt-4">
+                <button type="button" id="resendCode" class="text-sm text-blue-600 hover:text-blue-800">
+                  <i class="fas fa-redo mr-1"></i> Reenviar código
+                </button>
+                
+                <div class="flex space-x-2">
+                  <button type="button" id="cancelDelete" class="px-4 py-2 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
+                    Cancelar
+                  </button>
+                  <button type="submit" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50" disabled>
+                    Confirmar Exclusão
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-  </main>
 
   <?php require './partials/footer.php'; ?>
   <script>
+    // Modal de exclusão de conta
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    const deleteModal = document.getElementById('deleteAccountModal');
+    const cancelDeleteBtn = document.getElementById('cancelDelete');
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+    const deleteTokenInput = document.getElementById('deleteToken');
+    const tokenError = document.getElementById('tokenError');
+    const deleteStep1 = document.getElementById('deleteStep1');
+    const deleteStep2 = document.getElementById('deleteStep2');
+    const resendCodeBtn = document.getElementById('resendCode');
 
-// Modal de exclusão de conta
-const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-const deleteModal = document.getElementById('deleteAccountModal');
-const cancelDeleteBtn = document.getElementById('cancelDelete');
-const confirmDeleteBtn = document.getElementById('confirmDelete');
-const deleteTokenInput = document.getElementById('deleteToken');
-const tokenError = document.getElementById('tokenError');
-const deleteStep1 = document.getElementById('deleteStep1');
-const deleteStep2 = document.getElementById('deleteStep2');
-const resendCodeBtn = document.getElementById('resendCode');
-
-// Verificar se deve mostrar a etapa 2
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('delete_sent')) {
-  deleteStep1.classList.add('hidden');
-  deleteStep2.classList.remove('hidden');
-}
-
-// Abrir modal
-deleteAccountBtn.addEventListener('click', () => {
-  deleteModal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  
-  // Resetar estados
-  if (urlParams.get('delete_sent')) {
-    deleteStep1.classList.add('hidden');
-    deleteStep2.classList.remove('hidden');
-  } else {
-    deleteStep1.classList.remove('hidden');
-    deleteStep2.classList.add('hidden');
-  }
-  deleteTokenInput.value = '';
-  tokenError.classList.add('hidden');
-});
-
-// Reenviar código
-resendCodeBtn?.addEventListener('click', () => {
-  fetch('enviar_delete.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `email=${encodeURIComponent('<?= $_SESSION['email'] ?>')}`
-  })
-  .then(response => {
-    if (response.ok) {
-      alert('Código reenviado com sucesso! Verifique seu e-mail.');
-    } else {
-      alert('Erro ao reenviar código. Tente novamente.');
+    // Verificar se deve mostrar a etapa 2
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('delete_sent')) {
+      deleteStep1.classList.add('hidden');
+      deleteStep2.classList.remove('hidden');
     }
-  });
-});
 
-// Validação do token
-deleteTokenInput?.addEventListener('input', (e) => {
-  const value = e.target.value.replace(/\D/g, '');
-  e.target.value = value;
-  
-  if (value.length === 6) {
-    confirmDeleteBtn.disabled = false;
-  } else {
-    confirmDeleteBtn.disabled = true;
-  }
-});
+    // Abrir modal
+    deleteAccountBtn.addEventListener('click', () => {
+      deleteModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      // Resetar estados
+      if (urlParams.get('delete_sent')) {
+        deleteStep1.classList.add('hidden');
+        deleteStep2.classList.remove('hidden');
+      } else {
+        deleteStep1.classList.remove('hidden');
+        deleteStep2.classList.add('hidden');
+      }
+      deleteTokenInput.value = '';
+      tokenError.classList.add('hidden');
+    });
 
-// Fechar modal
-cancelDeleteBtn.addEventListener('click', () => {
-  deleteModal.classList.add('hidden');
-  document.body.style.overflow = '';
-});
+    // Reenviar código
+    resendCodeBtn?.addEventListener('click', () => {
+      fetch('enviar_delete.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `email=${encodeURIComponent('<?= $_SESSION['email'] ?>')}`
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Código reenviado com sucesso! Verifique seu e-mail.');
+        } else {
+          alert('Erro ao reenviar código. Tente novamente.');
+        }
+      });
+    });
 
-// Fechar ao clicar fora
-deleteModal.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-overlay')) {
-    deleteModal.classList.add('hidden');
-    document.body.style.overflow = '';
-  }
-});
+    // Validação do token
+    deleteTokenInput?.addEventListener('input', (e) => {
+      const value = e.target.value.replace(/\D/g, '');
+      e.target.value = value;
+      
+      if (value.length === 6) {
+        confirmDeleteBtn.disabled = false;
+      } else {
+        confirmDeleteBtn.disabled = true;
+      }
+    });
 
-// Fechar com ESC
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
-    deleteModal.classList.add('hidden');
-    document.body.style.overflow = '';
-  }
-});
+    // Fechar modal
+    cancelDeleteBtn.addEventListener('click', () => {
+      deleteModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+
+    // Fechar ao clicar fora
+    deleteModal.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        deleteModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Fechar com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+        deleteModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
 
     // Atualize a função changeTab no seu arquivo config.php
     function changeTab(tabName) {
@@ -484,83 +416,54 @@ document.addEventListener('keydown', (e) => {
         });
       }
     }
-    // Controle das abas
-    function changeTab(tabName) {
-      // Atualiza a URL sem recarregar a página
-      history.pushState(null, null, `?tab=${tabName}`);
 
-      // Remove a classe active de todas as abas e conteúdos
-      document.querySelectorAll('.settings-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
+    // Interceptar envio do formulário de solicitação do código
+    const deleteTokenRequestForm = document.getElementById('deleteTokenRequestForm');
+    deleteTokenRequestForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-      // Adiciona a classe active na aba e conteúdo selecionados
-      document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-    }
+      const formData = new FormData(deleteTokenRequestForm);
 
-    // Modo escuro - Versão melhorada
-const darkModeToggle = document.getElementById('darkModeToggle');
+      try {
+        const response = await fetch('enviar_delete.php', {
+          method: 'POST',
+          body: formData
+        });
 
-// Função para aplicar/remover o tema escuro
-function applyDarkMode(isDark) {
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        document.body.classList.remove('dark-mode');
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
-}
-
-// Verifica preferência salva ou do sistema
-const savedTheme = localStorage.getItem('theme');
-const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-    applyDarkMode(true);
-    darkModeToggle.checked = true;
-} else {
-    applyDarkMode(false);
-    darkModeToggle.checked = false;
-}
-
-// Event listener para o toggle
-darkModeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        localStorage.setItem('theme', 'dark');
-        applyDarkMode(true);
-    } else {
-        localStorage.setItem('theme', 'light');
-        applyDarkMode(false);
-    }
-    
-    // Dispara evento personalizado para outras páginas
-    const themeEvent = new CustomEvent('themeChanged', {
-        detail: { theme: this.checked ? 'dark' : 'light' }
+        if (response.ok) {
+          // Mostrar a etapa 2 do modal
+          deleteStep1.classList.add('hidden');
+          deleteStep2.classList.remove('hidden');
+          deleteTokenInput.focus();
+        } else {
+          const errorText = await response.text();
+          if (errorText === 'email_not_found') {
+            alert('E-mail não encontrado.');
+          } else {
+            alert('Erro ao enviar o e-mail. Tente novamente.');
+          }
+        }
+      } catch (error) {
+        alert('Erro de conexão. Tente novamente.');
+      }
     });
-    window.dispatchEvent(themeEvent);
-});
-    // Controle do modo para daltônicos
-    document.querySelectorAll('input[name="daltonismo"]').forEach(radio => {
-      radio.addEventListener('change', function() {
-        document.body.className = '';
-        document.body.classList.remove('dark-mode');
-        if (this.value !== 'none') {
-          document.body.classList.add(`daltonismo-${this.value}`);
-        }
-        localStorage.setItem('daltonismoMode', this.value);
-      });
 
-      // Aplica o modo salvo
-      if (radio.value === localStorage.getItem('daltonismoMode')) {
-        radio.checked = true;
-        if (radio.value !== 'none') {
-          document.body.classList.add(`daltonismo-${radio.value}`);
-        }
+    // Carrega a aba correta ao abrir a página
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+
+      if (tabParam) {
+        changeTab(tabParam);
+      }
+
+      // Verifica se deve mostrar a parte de redefinição
+      if (urlParams.get('sucesso') === '1') {
+        document.getElementById("enviarParte").classList.add("hidden");
+        document.getElementById("redefinirParte").classList.remove("hidden");
+        mostrarMensagemFlutuante();
+        iniciarExpiracao();
+        iniciarCooldownReenvio();
       }
     });
 
@@ -621,58 +524,6 @@ darkModeToggle.addEventListener('change', function() {
       iniciarExpiracao();
       iniciarCooldownReenvio();
     }
-
-    // Carrega a aba correta ao abrir a página
-    document.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tabParam = urlParams.get('tab');
-
-      if (tabParam) {
-        changeTab(tabParam);
-      }
-
-      // Verifica se deve mostrar a parte de redefinição
-      if (urlParams.get('sucesso') === '1') {
-        document.getElementById("enviarParte").classList.add("hidden");
-        document.getElementById("redefinirParte").classList.remove("hidden");
-        mostrarMensagemFlutuante();
-        iniciarExpiracao();
-        iniciarCooldownReenvio();
-      }
-    });
-
-    // Interceptar envio do formulário de solicitação do código
-const deleteTokenRequestForm = document.getElementById('deleteTokenRequestForm');
-deleteTokenRequestForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(deleteTokenRequestForm);
-
-  try {
-    const response = await fetch('enviar_delete.php', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (response.ok) {
-      // Mostrar a etapa 2 do modal
-      deleteStep1.classList.add('hidden');
-      deleteStep2.classList.remove('hidden');
-      deleteTokenInput.focus();
-    } else {
-      const errorText = await response.text();
-      if (errorText === 'email_not_found') {
-        alert('E-mail não encontrado.');
-      } else {
-        alert('Erro ao enviar o e-mail. Tente novamente.');
-      }
-    }
-  } catch (error) {
-    alert('Erro de conexão. Tente novamente.');
-  }
-});
-
   </script>
 </body>
-
 </html>

@@ -6,7 +6,7 @@
   --dark-text: #e2e8f0;
   --dark-border: #4a5568;
   --light-text: #1a202c;
-  --light-bg: #f8fafc;
+  --light-bg: #b3e5fc;
   --light-card: #ffffff;
   --light-border: #e2e8f0;
 }
@@ -38,11 +38,13 @@ body.dark-mode {
 
 .settings-tabs {
   display: flex;
+  justify-content: center;
   border-bottom: 1px solid var(--light-border);
   margin-bottom: 2rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 
 .settings-tabs::-webkit-scrollbar {
@@ -233,20 +235,6 @@ input:checked + .slider:before {
   }
 }
 
-.color-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.color-sample {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-}
-
 /* Estilos para redefinição de senha */
 .reset-password-container {
   width: 100%;
@@ -297,9 +285,9 @@ body.dark-mode .reset-input {
 }
 
 .reset-btn {
-  display: inline-block; /* Assim se comporta como botão, mas não ocupa 100% se não quiser */
-  width: 100%; /* Força 100% dentro do container pai */
-  max-width: 300px; /* Opcional: limita largura se quiser */
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
   padding: 0.75rem;
   background-color: var(--primary);
   color: white;
@@ -502,19 +490,6 @@ body.dark-mode .danger-description {
   pointer-events: none;
 }
 
-/* Adicione estas regras ao seu arquivo CSS existente */
-
-.settings-tabs {
-  display: flex;
-  justify-content: center; /* Centraliza as abas horizontalmente */
-  border-bottom: 1px solid var(--light-border);
-  margin-bottom: 2rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  scrollbar-width: none;
-  scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
-}
-
 /* Modal Overlay */
 .modal-overlay {
   position: fixed;
@@ -680,5 +655,3 @@ body.dark-mode .modal-card {
 #resendCode:hover {
   text-decoration: underline;
 }
-/* Mantenha todas as outras regras CSS existentes */
-
