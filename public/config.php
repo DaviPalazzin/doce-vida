@@ -6,20 +6,45 @@ require './partials/menu.php';
 // Determina a aba ativa
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
 
-// Conecta ao banco de dados e busca o nome do usuário usando o email da sessão
+// Conecta ao banco de dados e busca os dados do usuário
 include('conexao.php');
-$email = $_SESSION['email']; // Usando o email da sessão
-$query = "SELECT username FROM usuarios WHERE email = '$email'";
+$email = $_SESSION['email'];
+$query = "SELECT username, data_nascimento, sexo FROM usuarios WHERE email = '$email'";
 $result = mysqli_query($conn, $query);
 
 if ($result && mysqli_num_rows($result) > 0) {
   $user_data = mysqli_fetch_assoc($result);
   $username = $user_data['username'];
+  $data_nascimento = $user_data['data_nascimento'];
+  $sexo = $user_data['sexo'];
 } else {
-  $username = "Usuário"; // Valor padrão caso não encontre
+  $username = "Usuário";
+  $data_nascimento = '';
+  $sexo = '';
 }
 
-// Adicione isso na parte de processamento POST
+// Processar POST para salvar dados
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $active_tab === 'conta' && isset($_POST['salvar_dados'])) {
+  $nova_data_nascimento = $_POST['data_nascimento'] ?? null;
+  $novo_sexo = $_POST['sexo'] ?? null;
+  
+  // Atualizar no banco de dados
+  $update_query = "UPDATE usuarios SET data_nascimento = ?, sexo = ? WHERE email = ?";
+  $stmt = mysqli_prepare($conn, $update_query);
+  mysqli_stmt_bind_param($stmt, "sss", $nova_data_nascimento, $novo_sexo, $email);
+  
+  if (mysqli_stmt_execute($stmt)) {
+    $success_message = "Dados atualizados com sucesso!";
+    // Atualizar variáveis locais para exibir os novos valores
+    $data_nascimento = $nova_data_nascimento;
+    $sexo = $novo_sexo;
+  } else {
+    $error_message = "Erro ao atualizar dados: " . mysqli_error($conn);
+  }
+  mysqli_stmt_close($stmt);
+}
+
+// Processar exclusão de conta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
   $token = $_POST['delete_token'];
 
@@ -83,9 +108,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
       </div>
 
       <!-- Conteúdo das abas -->
-      <form method="POST" action="config.php">
+      <form method="POST" action="config.php?tab=<?= $active_tab ?>">
         <!-- ABA CONTA -->
         <div id="conta-tab" class="tab-content <?= $active_tab === 'conta' ? 'active' : '' ?>">
+          <?php if (isset($success_message)): ?>
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+              <p><?= $success_message ?></p>
+            </div>
+          <?php endif; ?>
+          
+          <?php if (isset($error_message)): ?>
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+              <p><?= $error_message ?></p>
+            </div>
+          <?php endif; ?>
+
           <div class="settings-card">
             <h2 class="settings-title">Informações Pessoais</h2>
 
@@ -102,24 +139,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
 
               <div class="form-group">
                 <label class="form-label">Data de nascimento</label>
-                <input type="date" class="form-control" value="1990-01-01">
+                <input type="date" name="data_nascimento" class="form-control" value="<?= htmlspecialchars($data_nascimento) ?>">
               </div>
             </div>
 
             <div class="form-group">
               <label class="form-label">Sexo</label>
-              <select class="form-control">
+              <select name="sexo" class="form-control">
                 <option value="">Selecione</option>
-                <option value="masculino">Masculino</option>
-                <option value="feminino">Feminino</option>
-                <option value="outro">Outro</option>
-                <option value="nao_informar">Prefiro não informar</option>
+                <option value="masculino" <?= $sexo === 'masculino' ? 'selected' : '' ?>>Masculino</option>
+                <option value="feminino" <?= $sexo === 'feminino' ? 'selected' : '' ?>>Feminino</option>
+                <option value="outro" <?= $sexo === 'outro' ? 'selected' : '' ?>>Outro</option>
+                <option value="nao_informar" <?= $sexo === 'nao_informar' ? 'selected' : '' ?>>Prefiro não informar</option>
               </select>
             </div>
           </div>
 
           <div class="flex justify-end">
-            <button type="submit" class="btn-save">
+            <button type="submit" name="salvar_dados" class="btn-save">
               <i class="fas fa-save mr-2"></i>Salvar alterações
             </button>
           </div>
