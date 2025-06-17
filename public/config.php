@@ -215,48 +215,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
           </div>
         </div>
 
-        <!-- ABA SEGURANÇA -->
+<!-- ABA SEGURANÇA -->
         <div id="seguranca-tab" class="tab-content <?= $active_tab === 'seguranca' ? 'active' : '' ?>">
           <div class="settings-card">
             <h2 class="settings-title">Alterar Senha</h2>
 
             <div class="reset-password-container">
-              <!-- Mensagem flutuante -->
-              <div id="mensagemSucesso" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-sm px-4 py-2 rounded shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none z-50">
-                Código de redefinição enviado com sucesso! Verifique seu e-mail.
-              </div>
 
               <!-- Parte 1: Enviar código -->
               <div id="enviarParte">
                 <h2 class="reset-title">Redefinir Senha</h2>
-                <p class="reset-subtitle">Digite o seu e-mail para receber o código de redefinição.</p>
+                <p class="reset-subtitle">Clique no botão abaixo para ser direcionado à pagina de redefinição de senha.</p>
 
-                <form method="POST" action="enviar_reset.php" class="w-full max-w-md mt-8">
-                  <input name="email" class="reset-input" placeholder="E-mail" type="email" required>
-                  <?php if (isset($_GET['erro'])): ?>
-                    <p class="reset-error">E-mail não cadastrado. Tente novamente com um e-mail válido.</p>
-                  <?php endif; ?>
-                  <button type="submit" class="reset-btn">Enviar Código</button>
-                </form>
-              </div>
+                <div style="text-align: center;">
+  <a href="resetar_senha.php" class="reset-btn">Redefinir</a>
+</div>
 
-              <!-- Parte 2: Redefinir senha -->
-              <div id="redefinirParte" class="hidden">
-                <h2 class="reset-title">Redefinir Senha</h2>
-                <p class="reset-subtitle">Digite o código enviado ao seu e-mail e a nova senha.</p>
-
-                <!-- Cronômetro e botão -->
-                <div class="reset-timer-container">
-                  <p id="tempoRestante" class="reset-timer">expira em: 15:00</p>
-                  <button id="reenviarCodigo" onclick="reenviarCodigo()" class="reset-resend" disabled>Reenviar código</button>
-                </div>
-
-                <form method="POST" action="processar_reset.php" class="w-full max-w-md mt-8">
-                  <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
-                  <input name="token" class="reset-input" placeholder="Código do E-mail" type="text" required>
-                  <input name="nova_senha" class="reset-input" placeholder="Nova Senha" type="password" required>
-                  <button type="submit" class="reset-btn">Atualizar Senha</button>
-                </form>
               </div>
             </div>
           </div>
@@ -482,7 +456,6 @@ document.addEventListener('keydown', (e) => {
     document.body.style.overflow = '';
   }
 });
-
 
     // Atualize a função changeTab no seu arquivo config.php
     function changeTab(tabName) {
