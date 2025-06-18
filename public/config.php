@@ -84,6 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/public/script.js" defer></script>
+  
+  <style>
+    .fade-out {
+      transition: opacity 0.5s ease-out;
+      opacity: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -112,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         <!-- ABA CONTA -->
         <div id="conta-tab" class="tab-content <?= $active_tab === 'conta' ? 'active' : '' ?>">
           <?php if (isset($success_message)): ?>
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+            <div id="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
               <p><?= $success_message ?></p>
             </div>
           <?php endif; ?>
@@ -338,7 +345,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
   </div>
 
   <?php require './partials/footer.php'; ?>
-  <script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Esconder mensagem de sucesso após 5 segundos
+    const successMessage = document.getElementById('successMessage');
+    if (successMessage) {
+      setTimeout(() => {
+        successMessage.classList.add('fade-out');
+        setTimeout(() => {
+          successMessage.remove();
+        }, 500);
+      }, 5000);
+    }
+
     // Modal de exclusão de conta
     const deleteAccountBtn = document.getElementById('deleteAccountBtn');
     const deleteModal = document.getElementById('deleteAccountModal');
@@ -358,11 +377,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     }
 
     // Abrir modal
-    deleteAccountBtn.addEventListener('click', () => {
+    deleteAccountBtn?.addEventListener('click', () => {
       deleteModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
-      
-      // Resetar estados
+
       if (urlParams.get('delete_sent')) {
         deleteStep1.classList.add('hidden');
         deleteStep2.classList.remove('hidden');
@@ -396,22 +414,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     deleteTokenInput?.addEventListener('input', (e) => {
       const value = e.target.value.replace(/\D/g, '');
       e.target.value = value;
-      
-      if (value.length === 6) {
-        confirmDeleteBtn.disabled = false;
-      } else {
-        confirmDeleteBtn.disabled = true;
-      }
+
+      confirmDeleteBtn.disabled = value.length !== 6;
     });
 
     // Fechar modal
-    cancelDeleteBtn.addEventListener('click', () => {
+    cancelDeleteBtn?.addEventListener('click', () => {
       deleteModal.classList.add('hidden');
       document.body.style.overflow = '';
     });
 
     // Fechar ao clicar fora
-    deleteModal.addEventListener('click', (e) => {
+    deleteModal?.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-overlay')) {
         deleteModal.classList.add('hidden');
         document.body.style.overflow = '';
@@ -426,39 +440,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
       }
     });
 
-    // Atualize a função changeTab no seu arquivo config.php
-    function changeTab(tabName) {
-      // Atualiza a URL sem recarregar a página
-      history.pushState(null, null, `?tab=${tabName}`);
-
-      // Remove a classe active de todas as abas e conteúdos
-      document.querySelectorAll('.settings-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-
-      // Adiciona a classe active na aba e conteúdo selecionados
-      const activeTab = document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`);
-      activeTab.classList.add('active');
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-
-      // Centraliza a aba ativa
-      if (activeTab) {
-        activeTab.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-      }
-    }
-
     // Interceptar envio do formulário de solicitação do código
     const deleteTokenRequestForm = document.getElementById('deleteTokenRequestForm');
     deleteTokenRequestForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const formData = new FormData(deleteTokenRequestForm);
 
       try {
@@ -468,7 +453,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         });
 
         if (response.ok) {
-          // Mostrar a etapa 2 do modal
           deleteStep1.classList.add('hidden');
           deleteStep2.classList.remove('hidden');
           deleteTokenInput.focus();
@@ -486,26 +470,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     });
 
     // Carrega a aba correta ao abrir a página
-    document.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tabParam = urlParams.get('tab');
+    const tabParam = urlParams.get('tab');
+    if (tabParam) {
+      changeTab(tabParam);
+    }
 
-      if (tabParam) {
-        changeTab(tabParam);
-      }
+    // Verifica se deve mostrar a parte de redefinição
+    if (urlParams.get('sucesso') === '1') {
+      document.getElementById("enviarParte").classList.add("hidden");
+      document.getElementById("redefinirParte").classList.remove("hidden");
+      mostrarMensagemFlutuante();
+      iniciarExpiracao();
+      iniciarCooldownReenvio();
+    }
 
-      // Verifica se deve mostrar a parte de redefinição
-      if (urlParams.get('sucesso') === '1') {
-        document.getElementById("enviarParte").classList.add("hidden");
-        document.getElementById("redefinirParte").classList.remove("hidden");
-        mostrarMensagemFlutuante();
-        iniciarExpiracao();
-        iniciarCooldownReenvio();
-      }
-    });
+    // Função de troca de aba
+    function changeTab(tabName) {
+      history.pushState(null, null, `?tab=${tabName}`);
+
+      document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      const activeTab = document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`);
+      activeTab?.classList.add('active');
+      document.getElementById(`${tabName}-tab`)?.classList.add('active');
+
+      activeTab?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
 
     // Código para redefinição de senha
-    let tempoExpiracao = 900; // 15 minutos
+    let tempoExpiracao = 900;
     let tempoReenvio = 60;
     let intervaloExpiracao, intervaloReenvio;
 
@@ -555,12 +557,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
       }, 3000);
     }
 
-    function reenviarCodigo() {
+    window.reenviarCodigo = function() {
       alert("Código reenviado para seu e-mail.");
       mostrarMensagemFlutuante();
       iniciarExpiracao();
       iniciarCooldownReenvio();
-    }
-  </script>
+    };
+  });
+</script>
+
 </body>
 </html>
