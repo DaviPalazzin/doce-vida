@@ -1,7 +1,13 @@
 <?php
+session_start();
+
+// Redireciona se não estiver logado
+if (!isset($_SESSION['email'])) {
+    header("Location: index.php");
+    exit();
+}
+
 $mostrarVoltar = true;
-require './partials/header.php';
-require './partials/menu.php';
 
 // Determina a aba ativa
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'conta';
@@ -68,6 +74,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     }
   }
 }
+
+// Buscar sessões ativas
+$current_session_token = $_COOKIE['session_token'] ?? '';
+$query = "SELECT s.* FROM sessoes s 
+          JOIN usuarios u ON s.usuario_id = u.id 
+          WHERE u.email = '$email' 
+          ORDER BY s.data_ultimo_acesso DESC";
+$sessoes_result = mysqli_query($conn, $query);
+$sessoes_ativas = [];
+if ($sessoes_result) {
+    $sessoes_ativas = mysqli_fetch_all($sessoes_result, MYSQLI_ASSOC);
+}
+
+// Processar logout de sessão
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['encerrar_sessao'])) {
+    $sessao_id = $_POST['sessao_id'];
+    $query = "DELETE FROM sessoes WHERE id = ? AND usuario_id = (SELECT id FROM usuarios WHERE email = ?)";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "is", $sessao_id, $email);
+    mysqli_stmt_execute($stmt);
+    
+    // Se estiver encerrando a sessão atual, fazer logout
+    if (mysqli_affected_rows($conn)) {
+        foreach ($sessoes_ativas as $sessao) {
+            if ($sessao['id'] == $sessao_id && $sessao['token_sessao'] == $current_session_token) {
+                session_destroy();
+                setcookie('session_token', '', time() - 3600, '/');
+                header("Location: /login.php");
+                exit();
+            }
+        }
+        // Recarregar a página para atualizar a lista
+        header("Location: ".$_SERVER['PHP_SELF']."?tab=seguranca");
+        exit();
+    }
+}
+
+require './partials/header.php';
+require './partials/menu.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -89,6 +135,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     .fade-out {
       transition: opacity 0.5s ease-out;
       opacity: 0;
+    }
+    .session-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .session-item.current-session {
+      background-color: #f0fdf4;
+      border-left: 3px solid #10b981;
+    }
+    .current-session-badge {
+      background-color: #10b981;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    .session-device {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .session-info {
+      color: #64748b;
+      font-size: 14px;
+    }
+    .session-logout {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    .session-logout:hover {
+      background-color: #dc2626;
     }
   </style>
 </head>
@@ -217,21 +303,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
               <p class="session-description">Estes são os dispositivos que estão atualmente logados na sua conta.</p>
 
               <div class="session-list">
-                <div class="session-item">
-                  <div>
-                    <p class="session-device">Chrome - Windows 10</p>
-                    <p class="session-info">São Paulo, BR • Agora mesmo</p>
+                <?php if (empty($sessoes_ativas)): ?>
+                  <p class="text-gray-500">Nenhuma sessão ativa no momento.</p>
+                <?php else: ?>
+                  <?php foreach ($sessoes_ativas as $sessao): 
+                    $data_acesso = new DateTime($sessao['data_ultimo_acesso']);
+                    $agora = new DateTime();
+                    $intervalo = $agora->diff($data_acesso);
+                    
+                    $tempo_atras = '';
+                    if ($intervalo->y > 0) {
+                        $tempo_atras = $intervalo->y . ' ano' . ($intervalo->y > 1 ? 's' : '') . ' atrás';
+                    } elseif ($intervalo->m > 0) {
+                        $tempo_atras = $intervalo->m . ' mês' . ($intervalo->m > 1 ? 'es' : '') . ' atrás';
+                    } elseif ($intervalo->d > 0) {
+                        $tempo_atras = $intervalo->d . ' dia' . ($intervalo->d > 1 ? 's' : '') . ' atrás';
+                    } elseif ($intervalo->h > 0) {
+                        $tempo_atras = $intervalo->h . ' hora' . ($intervalo->h > 1 ? 's' : '') . ' atrás';
+                    } elseif ($intervalo->i > 0) {
+                        $tempo_atras = $intervalo->i . ' minuto' . ($intervalo->i > 1 ? 's' : '') . ' atrás';
+                    } else {
+                        $tempo_atras = 'Agora mesmo';
+                    }
+                    
+                    $localizacao = [];
+                    if ($sessao['cidade']) $localizacao[] = $sessao['cidade'];
+                    if ($sessao['estado']) $localizacao[] = $sessao['estado'];
+                    if ($sessao['pais']) $localizacao[] = $sessao['pais'];
+                  ?>
+                  <div class="session-item <?= $sessao['token_sessao'] === $current_session_token ? 'current-session' : '' ?>">
+                    <div>
+                      <p class="session-device">
+                        <?= htmlspecialchars($sessao['navegador'] ?? 'Navegador desconhecido') ?> - 
+                        <?= htmlspecialchars($sessao['sistema_operacional'] ?? 'Sistema desconhecido') ?>
+                        <?php if ($sessao['token_sessao'] === $current_session_token): ?>
+                          <span class="current-session-badge">(esta sessão)</span>
+                        <?php endif; ?>
+                      </p>
+                      <p class="session-info">
+                        <?= !empty($localizacao) ? implode(', ', $localizacao) . ' • ' : '' ?>
+                        <?= $tempo_atras ?>
+                      </p>
+                    </div>
+                    <form method="POST" action="">
+                      <input type="hidden" name="sessao_id" value="<?= $sessao['id'] ?>">
+                      <button type="submit" name="encerrar_sessao" class="session-logout">
+                        Sair
+                      </button>
+                    </form>
                   </div>
-                  <button class="session-logout">Sair</button>
-                </div>
-
-                <div class="session-item">
-                  <div>
-                    <p class="session-device">Safari - iPhone</p>
-                    <p class="session-info">Rio de Janeiro, BR • 2 horas atrás</p>
-                  </div>
-                  <button class="session-logout">Sair</button>
-                </div>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </div>
             </div>
           </div>
@@ -346,19 +468,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
 
   <?php require './partials/footer.php'; ?>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Esconder mensagem de sucesso após 5 segundos
-    const successMessage = document.getElementById('successMessage');
-    if (successMessage) {
-      setTimeout(() => {
-        successMessage.classList.add('fade-out');
-        setTimeout(() => {
-          successMessage.remove();
-        }, 500);
-      }, 5000);
-    }
-
-    // Modal de exclusão de conta
+  // Modal de exclusão de conta
     const deleteAccountBtn = document.getElementById('deleteAccountBtn');
     const deleteModal = document.getElementById('deleteAccountModal');
     const cancelDeleteBtn = document.getElementById('cancelDelete');
@@ -377,10 +487,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     }
 
     // Abrir modal
-    deleteAccountBtn?.addEventListener('click', () => {
+    deleteAccountBtn.addEventListener('click', () => {
       deleteModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
-
+      
+      // Resetar estados
       if (urlParams.get('delete_sent')) {
         deleteStep1.classList.add('hidden');
         deleteStep2.classList.remove('hidden');
@@ -414,18 +525,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     deleteTokenInput?.addEventListener('input', (e) => {
       const value = e.target.value.replace(/\D/g, '');
       e.target.value = value;
-
-      confirmDeleteBtn.disabled = value.length !== 6;
+      
+      if (value.length === 6) {
+        confirmDeleteBtn.disabled = false;
+      } else {
+        confirmDeleteBtn.disabled = true;
+      }
     });
 
     // Fechar modal
-    cancelDeleteBtn?.addEventListener('click', () => {
+    cancelDeleteBtn.addEventListener('click', () => {
       deleteModal.classList.add('hidden');
       document.body.style.overflow = '';
     });
 
     // Fechar ao clicar fora
-    deleteModal?.addEventListener('click', (e) => {
+    deleteModal.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-overlay')) {
         deleteModal.classList.add('hidden');
         document.body.style.overflow = '';
@@ -440,10 +555,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
       }
     });
 
+    // Atualize a função changeTab no seu arquivo config.php
+    function changeTab(tabName) {
+      // Atualiza a URL sem recarregar a página
+      history.pushState(null, null, `?tab=${tabName}`);
+
+      // Remove a classe active de todas as abas e conteúdos
+      document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      // Adiciona a classe active na aba e conteúdo selecionados
+      const activeTab = document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`);
+      activeTab.classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+
+      // Centraliza a aba ativa
+      if (activeTab) {
+        activeTab.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+
     // Interceptar envio do formulário de solicitação do código
     const deleteTokenRequestForm = document.getElementById('deleteTokenRequestForm');
     deleteTokenRequestForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const formData = new FormData(deleteTokenRequestForm);
 
       try {
@@ -453,6 +597,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
         });
 
         if (response.ok) {
+          // Mostrar a etapa 2 do modal
           deleteStep1.classList.add('hidden');
           deleteStep2.classList.remove('hidden');
           deleteTokenInput.focus();
@@ -470,44 +615,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     });
 
     // Carrega a aba correta ao abrir a página
-    const tabParam = urlParams.get('tab');
-    if (tabParam) {
-      changeTab(tabParam);
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
 
-    // Verifica se deve mostrar a parte de redefinição
-    if (urlParams.get('sucesso') === '1') {
-      document.getElementById("enviarParte").classList.add("hidden");
-      document.getElementById("redefinirParte").classList.remove("hidden");
-      mostrarMensagemFlutuante();
-      iniciarExpiracao();
-      iniciarCooldownReenvio();
-    }
+      if (tabParam) {
+        changeTab(tabParam);
+      }
 
-    // Função de troca de aba
-    function changeTab(tabName) {
-      history.pushState(null, null, `?tab=${tabName}`);
-
-      document.querySelectorAll('.settings-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-
-      const activeTab = document.querySelector(`.settings-tab[onclick="changeTab('${tabName}')"]`);
-      activeTab?.classList.add('active');
-      document.getElementById(`${tabName}-tab`)?.classList.add('active');
-
-      activeTab?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
-    }
+      // Verifica se deve mostrar a parte de redefinição
+      if (urlParams.get('sucesso') === '1') {
+        document.getElementById("enviarParte").classList.add("hidden");
+        document.getElementById("redefinirParte").classList.remove("hidden");
+        mostrarMensagemFlutuante();
+        iniciarExpiracao();
+        iniciarCooldownReenvio();
+      }
+    });
 
     // Código para redefinição de senha
-    let tempoExpiracao = 900;
+    let tempoExpiracao = 900; // 15 minutos
     let tempoReenvio = 60;
     let intervaloExpiracao, intervaloReenvio;
 
@@ -557,13 +684,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
       }, 3000);
     }
 
-    window.reenviarCodigo = function() {
+    function reenviarCodigo() {
       alert("Código reenviado para seu e-mail.");
       mostrarMensagemFlutuante();
       iniciarExpiracao();
       iniciarCooldownReenvio();
-    };
-  });
+    }
 </script>
 
 </body>

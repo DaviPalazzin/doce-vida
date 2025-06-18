@@ -24,6 +24,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (password_verify($senha, $user['senha'])) {
             $_SESSION['email'] = $user['email'];
+            
+            // Função para obter informações do cliente
+            function getClientInfo() {
+                $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                $ip_address = $_SERVER['REMOTE_ADDR'];
+                
+                // Detectar dispositivo e SO
+                $dispositivo = 'Computador';
+                $so = 'Desconhecido';
+                
+                if (strpos($user_agent, 'Mobile') !== false) {
+                    $dispositivo = 'Mobile';
+                } elseif (strpos($user_agent, 'Tablet') !== false) {
+                    $dispositivo = 'Tablet';
+                }
+                
+                if (strpos($user_agent, 'Windows') !== false) {
+                    $so = 'Windows';
+                } elseif (strpos($user_agent, 'Mac') !== false) {
+                    $so = 'MacOS';
+                } elseif (strpos($user_agent, 'Linux') !== false) {
+                    $so = 'Linux';
+                } elseif (strpos($user_agent, 'Android') !== false) {
+                    $so = 'Android';
+                } elseif (strpos($user_agent, 'iOS') !== false) {
+                    $so = 'iOS';
+                }
+                
+                // Detectar navegador
+                $navegador = 'Desconhecido';
+                if (strpos($user_agent, 'Chrome') !== false) {
+                    $navegador = 'Chrome';
+                } elseif (strpos($user_agent, 'Firefox') !== false) {
+                    $navegador = 'Firefox';
+                } elseif (strpos($user_agent, 'Safari') !== false) {
+                    $navegador = 'Safari';
+                } elseif (strpos($user_agent, 'Edge') !== false) {
+                    $navegador = 'Edge';
+                } elseif (strpos($user_agent, 'Opera') !== false) {
+                    $navegador = 'Opera';
+                }
+                
+                // Obter localização (simplificado - na prática use uma API como ipstack)
+                $pais = 'Brasil'; // Substitua por chamada de API real
+                $estado = 'São Paulo'; // Substitua por chamada de API real
+                $cidade = 'São Paulo'; // Substitua por chamada de API real
+                
+                return [
+                    'user_agent' => $user_agent,
+                    'ip_address' => $ip_address,
+                    'dispositivo' => $dispositivo,
+                    'sistema_operacional' => $so,
+                    'navegador' => $navegador,
+                    'pais' => $pais,
+                    'estado' => $estado,
+                    'cidade' => $cidade
+                ];
+            }
+
+            // Gerar token de sessão
+            $token_sessao = bin2hex(random_bytes(32));
+
+            // Registrar a sessão no banco de dados
+            $client_info = getClientInfo();
+            $query = "INSERT INTO sessoes (usuario_id, token_sessao, user_agent, ip_address, pais, estado, cidade, dispositivo, sistema_operacional, navegador, esta_atual) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, "isssssssss", $user['id'], $token_sessao, $client_info['user_agent'], $client_info['ip_address'], 
+                $client_info['pais'], $client_info['estado'], $client_info['cidade'], $client_info['dispositivo'], 
+                $client_info['sistema_operacional'], $client_info['navegador']);
+            mysqli_stmt_execute($stmt);
+
+            // Definir cookie de sessão
+            setcookie('session_token', $token_sessao, time() + 60 * 60 * 24 * 30, '/', '', true, true); // 30 dias
+
             header("Location: home.php");
             exit();
         } else { 
