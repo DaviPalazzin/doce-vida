@@ -1,12 +1,25 @@
 <?php
+session_start();
 $pageTitle = "Perfil - javvzzy";
 $mostrarVoltar = true;
 require './partials/header.php';
 require './partials/menu.php';
-?>
 
-<?php
-require 'conexao.php'; // Arquivo com sua conexão PDO/MySQLi
+// Busca os dados do usuário
+require 'conexao.php';
+$username = "Usuário"; // Valor padrão
+
+if (isset($_SESSION['email'])) {
+    $stmt = $conn->prepare("SELECT username FROM usuarios WHERE email = ?");
+    $stmt->bind_param("s", $_SESSION['email']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result && $result->num_rows > 0) {
+        $user_data = $result->fetch_assoc();
+        $username = $user_data['username'];
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['foto_perfil'])) {
     $pasta_upload = "uploads/perfil/";
@@ -69,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['foto_perfil'])) {
                 </button>
             </div>
             <div class="profile-identity">
-                <h2 id="username">javvzzy <i class="fas fa-pencil-alt edit-username"></i></h2>
+                <h2 id="username"><?= htmlspecialchars($username) ?> <span class="text-sm text-gray-500 ml-2"><i class="fas fa-lock"></i></span></h2>
             </div>
         </div>
 
@@ -128,17 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['foto_perfil'])) {
 </div>
 
 <!-- Modais -->
-<div class="modal" id="username-modal">
-    <div class="modal-content">
-        <h3>EDITAR NICKNAME</h3>
-        <input type="text" id="username-edit-input" maxlength="20" value="javvzzy">
-        <div class="modal-buttons">
-            <button id="cancel-username">Cancelar</button>
-            <button id="save-username">Salvar</button>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="bio-modal">
     <div class="modal-content">
         <h3>EDITAR BIO</h3>
